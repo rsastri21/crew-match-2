@@ -28,6 +28,9 @@ function HeaderActions() {
     return (
         <>
             <ModeToggle />
+            <Button asChild variant="default">
+                <Link href="/signin">Sign In</Link>
+            </Button>
         </>
     );
 }
