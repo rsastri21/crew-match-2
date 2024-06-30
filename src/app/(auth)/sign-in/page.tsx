@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { GoogleIcon, SlackIcon } from "../auth-icons";
 import { MagicLinkForm } from "./magic-link-form";
-import { Mail } from "lucide-react";
+import { Mail, UserPlus } from "lucide-react";
 import { btnStyles } from "@/styles/icons";
 
 export default function SignInPage() {
@@ -50,14 +50,23 @@ export default function SignInPage() {
                         <SectionSeparator label="Or sign in with email" />
                         <MagicLinkForm />
                         <SectionSeparator label="Other options" />
-                        <div className="flex justify-center">
+                        <div className="flex flex-wrap justify-center gap-2">
                             <Button
                                 asChild
                                 variant="ghost"
-                                className={cn(btnStyles, "w-full")}
+                                className={cn(btnStyles, "w-fit")}
                             >
                                 <Link href="/sign-in/email">
                                     <Mail /> Sign in with email and password
+                                </Link>
+                            </Button>
+                            <Button
+                                asChild
+                                variant="ghost"
+                                className={cn(btnStyles, "w-fit")}
+                            >
+                                <Link href="/sign-up">
+                                    <UserPlus /> Sign up for Crew Match
                                 </Link>
                             </Button>
                         </div>
@@ -68,7 +77,7 @@ export default function SignInPage() {
     );
 }
 
-function SectionSeparator({ label }: { label: string }) {
+export function SectionSeparator({ label }: { label: string }) {
     return (
         <div className="relative py-4">
             <div className="absolute inset-0 flex items-center">
