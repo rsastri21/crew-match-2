@@ -49,7 +49,7 @@ export const profiles = pgTable("profiles", {
     pronouns: varchar("pronouns", { length: 256 }),
 });
 
-export const sessionTable = pgTable("session", {
+export const sessions = pgTable("session", {
     id: text("id").primaryKey(),
     userId: text("user_id")
         .notNull()
