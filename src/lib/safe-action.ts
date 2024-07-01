@@ -1,5 +1,5 @@
 import "dotenv";
-// import { assertAuthenticated } from "@/lib/session";
+import { assertAuthenticated } from "@/lib/session";
 import { createServerActionProcedure } from "zsa";
 import { PublicError } from "../utils/errors";
 
@@ -21,12 +21,12 @@ function shapeErrors({ err }: any) {
     }
 }
 
-// export const authenticatedAction = createServerActionProcedure()
-//   .experimental_shapeError(shapeErrors)
-//   .handler(async () => {
-//     const user = await assertAuthenticated();
-//     return { user };
-//   });
+export const authenticatedAction = createServerActionProcedure()
+    .experimental_shapeError(shapeErrors)
+    .handler(async () => {
+        const user = await assertAuthenticated();
+        return { user };
+    });
 
 export const unauthenticatedAction = createServerActionProcedure()
     .experimental_shapeError(shapeErrors)
