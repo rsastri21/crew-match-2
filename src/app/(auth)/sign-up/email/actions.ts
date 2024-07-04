@@ -25,6 +25,5 @@ export const signUpAction = unauthenticatedAction
             input.password,
             input.role
         );
-        console.log(user);
         return redirect("/sign-up/email/verify");
     });

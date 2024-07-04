@@ -5,10 +5,9 @@ import { eq } from "drizzle-orm";
 export async function createProfile(
     userId: string,
     name: string,
-    image?: string,
-    trx = db
+    image = `https://api.dicebear.com/9.x/initials/svg?seed=${name}`
 ) {
-    const [profile] = await trx
+    const [profile] = await db
         .insert(profiles)
         .values({
             userId,
@@ -23,10 +22,9 @@ export async function createProfile(
 
 export async function updateProfile(
     userId: string,
-    updatedProfile: Partial<Profile>,
-    trx = db
+    updatedProfile: Partial<Profile>
 ) {
-    await trx
+    await db
         .update(profiles)
         .set(updatedProfile)
         .where(eq(profiles.userId, userId));

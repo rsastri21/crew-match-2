@@ -1,7 +1,7 @@
 import { createUser, getUserByEmail, updateUser } from "@/data/users";
-import { AuthenticationError, EmailInUseError } from "./errors";
+import { AuthenticationError, EmailInUseError, NotFoundError } from "./errors";
 import { createAccount } from "@/data/accounts";
-import { createProfile } from "@/data/profiles";
+import { createProfile, getProfile } from "@/data/profiles";
 import {
     createVerifyEmailToken,
     deleteVerifyEmailToken,
@@ -9,7 +9,6 @@ import {
 } from "@/data/verify-email";
 import { sendEmail } from "@/lib/email";
 import { VerifyEmail } from "@/emails/verify-email";
-import { createTransaction } from "@/data/utils";
 
 export async function registerUser(
     name: string,
@@ -34,6 +33,16 @@ export async function registerUser(
     );
 
     return { id: user.id, role: user.role };
+}
+
+export async function getUserProfile(userId: string) {
+    const profile = await getProfile(userId);
+
+    if (!profile) {
+        throw new NotFoundError();
+    }
+
+    return profile;
 }
 
 export async function verifyEmail(token: string) {
