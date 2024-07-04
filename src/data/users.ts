@@ -32,9 +32,9 @@ export async function updateUser(
     await trx.update(users).set(updatedUser).where(eq(users.id, userId));
 }
 
-export async function getUserByEmail(userId: string) {
+export async function getUserByEmail(email: string) {
     const user = await db.query.users.findFirst({
-        where: eq(users.id, userId),
+        where: eq(users.email, email),
     });
 
     return user;

@@ -2,6 +2,8 @@
 
 import { unauthenticatedAction } from "@/lib/safe-action";
 import { setSession } from "@/lib/session";
+import { registerUser } from "@/utils/users";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 export const signUpAction = unauthenticatedAction
@@ -17,5 +19,13 @@ export const signUpAction = unauthenticatedAction
         })
     )
     .handler(async ({ input }) => {
-        console.log(input);
+        const user = await registerUser(
+            input.name,
+            input.email,
+            input.password,
+            input.role
+        );
+        console.log(user);
+        await setSession(user.id, user.role);
+        return redirect("/");
     });
