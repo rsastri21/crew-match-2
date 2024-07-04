@@ -33,7 +33,7 @@ export default function SignUpPage() {
                 <CardHeader>
                     <CardTitle>Sign up for Crew Match</CardTitle>
                     <CardDescription>
-                        Welcome! Let's get started.
+                        Welcome! Let&apos;s get started.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
