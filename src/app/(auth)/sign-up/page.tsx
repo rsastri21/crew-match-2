@@ -16,13 +16,13 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
-import { SectionSeparator } from "../sign-in/page";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { GoogleIcon, SlackIcon } from "../auth-icons";
 import { Mail } from "lucide-react";
 import { btnStyles } from "@/styles/icons";
+import { SectionSeparator } from "@/components/section-separator";
 
 export default function SignUpPage() {
     const [role, setRole] = useState<string>("user");

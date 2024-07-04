@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { z } from "zod";
 
 import { Input } from "@/components/ui/input";
@@ -31,7 +33,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export const signUpRolesEnum = z.enum(["user", "production_head"]);
+const signUpRolesEnum = z.enum(["user", "production_head"]);
 type SignUpRoles = z.infer<typeof signUpRolesEnum>;
 
 const registrationSchema = z
