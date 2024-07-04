@@ -16,7 +16,7 @@ function shapeErrors({ err }: any) {
     } else {
         return {
             code: "ERROR",
-            message: "Something went wrong",
+            message: err.message,
         };
     }
 }

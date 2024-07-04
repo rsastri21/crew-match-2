@@ -1,5 +1,15 @@
-import { createUser, getUserByEmail, updateUser } from "@/data/users";
-import { AuthenticationError, EmailInUseError, NotFoundError } from "./errors";
+import {
+    createUser,
+    getUserByEmail,
+    updateUser,
+    verifyPassword,
+} from "@/data/users";
+import {
+    AuthenticationError,
+    EmailInUseError,
+    LoginError,
+    NotFoundError,
+} from "./errors";
 import { createAccount } from "@/data/accounts";
 import { createProfile, getProfile } from "@/data/profiles";
 import {
@@ -31,6 +41,22 @@ export async function registerUser(
         `Verify your email for Crew Match`,
         <VerifyEmail token={token} />
     );
+
+    return { id: user.id, role: user.role };
+}
+
+export async function signInUser(email: string, password: string) {
+    const user = await getUserByEmail(email);
+
+    if (!user) {
+        throw new LoginError();
+    }
+
+    const isPasswordCorrect = verifyPassword(email, password);
+
+    if (!isPasswordCorrect) {
+        throw new LoginError();
+    }
 
     return { id: user.id, role: user.role };
 }
