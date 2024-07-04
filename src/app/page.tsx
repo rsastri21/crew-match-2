@@ -1,28 +1,16 @@
-"use client";
+import HomePage from "@/components/home-page";
+import { getCurrentUser } from "@/lib/session";
+import { getUserProfile } from "@/utils/users";
+import { cache } from "react";
 
-import { AuroraBackground } from "@/components/ui/aurora-background";
-import { motion } from "framer-motion";
+const profileLoader = cache(getUserProfile);
 
-export default function Home() {
-    return (
-        <AuroraBackground>
-            <motion.div
-                initial={{ opacity: 0.0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                    delay: 0.3,
-                    duration: 0.8,
-                    ease: "easeInOut",
-                }}
-                className="relative flex flex-col gap-4 items-center justify-center px-4"
-            >
-                <div className="text-3xl md:text-7xl font-bold text-center text-primary">
-                    Welcome to Crew Match
-                </div>
-                <div className="font-light md:text-4xl py-4 text-secondary-foreground">
-                    Sign in to get started
-                </div>
-            </motion.div>
-        </AuroraBackground>
-    );
+export default async function Home() {
+    const user = await getCurrentUser();
+    let profile;
+    if (user) {
+        profile = await profileLoader(user.id);
+    }
+
+    return <HomePage profile={profile} />;
 }
