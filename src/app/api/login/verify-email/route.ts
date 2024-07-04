@@ -1,3 +1,4 @@
+import { setSession } from "@/lib/session";
 import { verifyEmail } from "@/utils/users";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +17,8 @@ export async function GET(request: Request): Promise<Response> {
             });
         }
 
-        await verifyEmail(token);
+        const { id, role } = await verifyEmail(token);
+        await setSession(id, role);
 
         return new Response(null, {
             status: 302,

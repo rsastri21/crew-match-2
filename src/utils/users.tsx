@@ -45,10 +45,8 @@ export async function verifyEmail(token: string) {
 
     const userId = tokenEntry.userId;
 
-    await createTransaction(async (trx) => {
-        await updateUser(userId, { emailVerified: new Date() }, trx);
-        await deleteVerifyEmailToken(token, trx);
-    });
+    const user = await updateUser(userId, { emailVerified: new Date() });
+    await deleteVerifyEmailToken(token);
 
-    return userId;
+    return { id: user.id, role: user.role };
 }

@@ -29,7 +29,12 @@ export async function updateUser(
     updatedUser: Partial<User>,
     trx = db
 ) {
-    await trx.update(users).set(updatedUser).where(eq(users.id, userId));
+    const [user] = await trx
+        .update(users)
+        .set(updatedUser)
+        .where(eq(users.id, userId))
+        .returning();
+    return user;
 }
 
 export async function getUserByEmail(email: string) {

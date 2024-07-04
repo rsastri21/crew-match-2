@@ -26,6 +26,5 @@ export const signUpAction = unauthenticatedAction
             input.role
         );
         console.log(user);
-        await setSession(user.id, user.role);
-        return redirect("/");
+        return redirect("/sign-up/email/verify");
     });

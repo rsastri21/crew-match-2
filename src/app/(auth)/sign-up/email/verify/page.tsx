@@ -14,10 +14,10 @@ export default function SignedOutPage() {
         <AuroraBackground className="gap-8">
             <div className="flex flex-col justify-center items-center">
                 <div className="text-xl md:text-7xl font-bold text-center text-primary">
-                    Successfully signed out!
+                    Verify your Email
                 </div>
                 <div className="font-light md:text-4xl py-4 text-secondary-foreground">
-                    Thanks for using Crew Match
+                    Check your inbox for a message to verify your email
                 </div>
             </div>
         </AuroraBackground>
