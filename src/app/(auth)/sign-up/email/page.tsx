@@ -36,6 +36,7 @@ type SignUpRoles = z.infer<typeof signUpRolesEnum>;
 
 const registrationSchema = z
     .object({
+        name: z.string().min(1, { message: "Name is required." }),
         email: z.string().email(),
         password: z.string().min(8),
         passwordConfirmation: z.string().min(8),
@@ -68,6 +69,7 @@ export default function RegisterPage() {
     const form = useForm<z.infer<typeof registrationSchema>>({
         resolver: zodResolver(registrationSchema),
         defaultValues: {
+            name: "",
             email: "",
             password: "",
             passwordConfirmation: "",
@@ -95,6 +97,24 @@ export default function RegisterPage() {
                                 onSubmit={form.handleSubmit(onSubmit)}
                                 className="space-y-6"
                             >
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Name</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    className="w-full"
+                                                    placeholder="Enter your first and last name"
+                                                    type="text"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                                 <FormField
                                     control={form.control}
                                     name="email"
@@ -158,7 +178,7 @@ export default function RegisterPage() {
                                     <Alert variant="destructive">
                                         <Terminal className="h-4 w-4" />
                                         <AlertTitle>
-                                            Uhoh, we couldn&apos;t log you in
+                                            Uh oh, we couldn&apos;t log you in
                                         </AlertTitle>
                                         <AlertDescription>
                                             {error.message}
