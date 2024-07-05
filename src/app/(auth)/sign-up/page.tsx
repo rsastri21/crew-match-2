@@ -62,7 +62,7 @@ export default function SignUpPage() {
                         </div>
                         <SectionSeparator label="Choose a sign up option" />
                         <Link
-                            href={`/api/signup/google?role=${role}`}
+                            href={`/api/login/google?role=${role}`}
                             className={cn(
                                 buttonVariants({ variant: "default" }),
                                 "w-full"

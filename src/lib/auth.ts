@@ -1,9 +1,10 @@
+import "dotenv";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { db } from "@/db";
 import { sessions, users } from "@/db/schema";
 import { Lucia, Session, User } from "lucia";
-import "dotenv";
 import { cookies } from "next/headers";
+import { Google } from "arctic";
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
@@ -65,5 +66,11 @@ declare module "lucia" {
 }
 
 interface DatabaseUserAttributes {
-    role: string;
+    role: "user" | "production_head" | "admin";
 }
+
+export const googleAuth = new Google(
+    process.env.GOOGLE_CLIENT_ID!,
+    process.env.GOOGLE_CLIENT_SECRET!,
+    `${process.env.HOST_NAME!}/api/login/google/callback`
+);

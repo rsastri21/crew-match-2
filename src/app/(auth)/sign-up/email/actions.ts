@@ -1,7 +1,6 @@
 "use server";
 
 import { unauthenticatedAction } from "@/lib/safe-action";
-import { setSession } from "@/lib/session";
 import { registerUser } from "@/utils/users";
 import { redirect } from "next/navigation";
 import { z } from "zod";

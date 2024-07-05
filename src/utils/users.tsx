@@ -10,7 +10,7 @@ import {
     LoginError,
     NotFoundError,
 } from "./errors";
-import { createAccount } from "@/data/accounts";
+import { createAccount, createAccountViaGoogle } from "@/data/accounts";
 import { createProfile, getProfile } from "@/data/profiles";
 import {
     createVerifyEmailToken,
@@ -19,6 +19,7 @@ import {
 } from "@/data/verify-email";
 import { sendEmail } from "@/lib/email";
 import { VerifyEmail } from "@/emails/verify-email";
+import { GoogleUser } from "@/app/api/login/google/callback/route";
 
 export async function registerUser(
     name: string,
@@ -59,6 +60,19 @@ export async function signInUser(email: string, password: string) {
     }
 
     return { id: user.id, role: user.role };
+}
+
+export async function createGoogleUser(googleUser: GoogleUser, role: string) {
+    let existingUser = await getUserByEmail(googleUser.email);
+
+    if (!existingUser) {
+        existingUser = await createUser(googleUser.email, role);
+    }
+
+    await createAccountViaGoogle(existingUser.id, googleUser.sub);
+    await createProfile(existingUser.id, googleUser.name, googleUser.picture);
+
+    return { id: existingUser.id, role: existingUser.role };
 }
 
 export async function getUserProfile(userId: string) {

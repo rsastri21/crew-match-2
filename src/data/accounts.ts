@@ -24,12 +24,30 @@ export async function createAccount(
     return account;
 }
 
+export async function createAccountViaGoogle(userId: string, googleId: string) {
+    await db
+        .insert(accounts)
+        .values({
+            userId,
+            accountType: "google",
+            googleId,
+        })
+        .onConflictDoNothing()
+        .returning();
+}
+
 export async function getAccountByUserId(userId: string) {
     const account = await db.query.accounts.findFirst({
         where: eq(accounts.userId, userId),
     });
 
     return account;
+}
+
+export async function getAccountByGoogleId(googleId: string) {
+    return await db.query.accounts.findFirst({
+        where: eq(accounts.googleId, googleId),
+    });
 }
 
 export async function updatePassword(

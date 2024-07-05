@@ -45,6 +45,14 @@ export async function getUserByEmail(email: string) {
     return user;
 }
 
+export async function getUserById(userId: string) {
+    const user = await db.query.users.findFirst({
+        where: eq(users.id, userId),
+    });
+
+    return user;
+}
+
 export async function setEmailVerified(userId: string, trx = db) {
     await trx
         .update(users)
