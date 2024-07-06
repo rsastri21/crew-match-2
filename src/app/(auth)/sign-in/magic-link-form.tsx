@@ -15,6 +15,13 @@ import { signInMagicLinkAction } from "./actions";
 import { LoaderButton } from "@/components/loader-button";
 import { useServerAction } from "zsa-react";
 import { useToast } from "@/components/ui/use-toast";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+} from "@/components/ui/tooltip";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import { Info } from "lucide-react";
 
 const magicLinkSchema = z.object({
     email: z.string().email(),
@@ -52,7 +59,25 @@ export function MagicLinkForm() {
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <div className="flex justify-between items-center">
+                                <FormLabel>Email</FormLabel>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <Info className="w-5 h-5 text-muted-foreground" />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p className="p-2">
+                                                If you are not signed up, magic
+                                                link will make you a user by
+                                                default. <br />
+                                                This can be changed later if you
+                                                need to be a production head.
+                                            </p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            </div>
                             <FormControl>
                                 <Input
                                     {...field}
