@@ -72,7 +72,7 @@ export default function SignUpPage() {
                             Sign up with Google
                         </Link>
                         <Link
-                            href={`/api/signup/?role=${role}`}
+                            href={`/api/login/slack?role=${role}`}
                             className={cn(
                                 buttonVariants({ variant: "default" }),
                                 "w-full"

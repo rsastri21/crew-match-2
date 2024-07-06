@@ -36,6 +36,14 @@ export async function createAccountViaGoogle(userId: string, googleId: string) {
         .returning();
 }
 
+export async function createAccountViaSlack(userId: string, slackId: string) {
+    await db
+        .insert(accounts)
+        .values({ userId, accountType: "slack", slackId })
+        .onConflictDoNothing()
+        .returning();
+}
+
 export async function getAccountByUserId(userId: string) {
     const account = await db.query.accounts.findFirst({
         where: eq(accounts.userId, userId),
@@ -47,6 +55,12 @@ export async function getAccountByUserId(userId: string) {
 export async function getAccountByGoogleId(googleId: string) {
     return await db.query.accounts.findFirst({
         where: eq(accounts.googleId, googleId),
+    });
+}
+
+export async function getAccountBySlackId(slackId: string) {
+    return await db.query.accounts.findFirst({
+        where: eq(accounts.slackId, slackId),
     });
 }
 

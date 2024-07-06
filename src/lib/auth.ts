@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { sessions, users } from "@/db/schema";
 import { Lucia, Session, User } from "lucia";
 import { cookies } from "next/headers";
-import { Google } from "arctic";
+import { Google, Slack } from "arctic";
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
@@ -73,4 +73,14 @@ export const googleAuth = new Google(
     process.env.GOOGLE_CLIENT_ID!,
     process.env.GOOGLE_CLIENT_SECRET!,
     `${process.env.HOST_NAME!}/api/login/google/callback`
+);
+
+export const slackAuth = new Slack(
+    process.env.SLACK_CLIENT_ID!,
+    process.env.SLACK_CLIENT_SECRET!,
+    `${
+        process.env.NODE_ENV === "production"
+            ? process.env.HOST_NAME!
+            : "https://platypus-meet-evenly.ngrok-free.app"
+    }/api/login/slack/callback`
 );

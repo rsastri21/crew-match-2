@@ -11,7 +11,11 @@ import {
     LoginError,
     NotFoundError,
 } from "./errors";
-import { createAccount, createAccountViaGoogle } from "@/data/accounts";
+import {
+    createAccount,
+    createAccountViaGoogle,
+    createAccountViaSlack,
+} from "@/data/accounts";
 import { createProfile, getProfile } from "@/data/profiles";
 import {
     createVerifyEmailToken,
@@ -21,6 +25,7 @@ import {
 import { sendEmail } from "@/lib/email";
 import { VerifyEmail } from "@/emails/verify-email";
 import { GoogleUser } from "@/app/api/login/google/callback/route";
+import { SlackUser } from "@/app/api/login/slack/callback/route";
 
 export async function registerUser(
     name: string,
@@ -68,10 +73,33 @@ export async function createGoogleUser(googleUser: GoogleUser, role: string) {
 
     if (!existingUser) {
         existingUser = await createUser(googleUser.email, role);
+        if (googleUser.email_verified) {
+            existingUser = await updateUser(existingUser.id, {
+                emailVerified: new Date(),
+            });
+        }
     }
 
     await createAccountViaGoogle(existingUser.id, googleUser.sub);
     await createProfile(existingUser.id, googleUser.name, googleUser.picture);
+
+    return { id: existingUser.id, role: existingUser.role };
+}
+
+export async function createSlackUser(slackUser: SlackUser, role: string) {
+    let existingUser = await getUserByEmail(slackUser.email);
+
+    if (!existingUser) {
+        existingUser = await createUser(slackUser.email, role);
+        if (slackUser.email_verified) {
+            existingUser = await updateUser(existingUser.id, {
+                emailVerified: new Date(),
+            });
+        }
+    }
+
+    await createAccountViaSlack(existingUser.id, slackUser.sub);
+    await createProfile(existingUser.id, slackUser.name, slackUser.picture);
 
     return { id: existingUser.id, role: existingUser.role };
 }

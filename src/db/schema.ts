@@ -33,6 +33,7 @@ export const accounts = pgTable("accounts", {
         .notNull(),
     accountType: accountTypeEnum("account_type").notNull(),
     googleId: text("google_id").unique(),
+    slackId: text("slack_id").unique(),
     password: text("password"),
     salt: text("salt"),
 });
