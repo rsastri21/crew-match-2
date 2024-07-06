@@ -70,6 +70,7 @@ export async function GET(request: Request): Promise<Response> {
         }
 
         const role = Buffer.from(encodedUserRole, "base64").toString("binary");
+        cookies().delete("user_role");
 
         // Role parameter will only be used if the user does not exist, so we can pass
         // "user" as default as role will be null for existing users.

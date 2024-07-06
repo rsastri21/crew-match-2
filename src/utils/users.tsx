@@ -5,6 +5,7 @@ import {
     verifyPassword,
 } from "@/data/users";
 import {
+    AccountNotFoundError,
     AuthenticationError,
     EmailInUseError,
     LoginError,
@@ -50,7 +51,7 @@ export async function signInUser(email: string, password: string) {
     const user = await getUserByEmail(email);
 
     if (!user) {
-        throw new LoginError();
+        throw new AccountNotFoundError();
     }
 
     const isPasswordCorrect = verifyPassword(email, password);

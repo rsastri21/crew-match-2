@@ -38,3 +38,10 @@ export class LoginError extends PublicError {
         this.name = "LoginError";
     }
 }
+
+export class AccountNotFoundError extends PublicError {
+    constructor() {
+        super("Account not found");
+        this.name = "AccountNotFoundError";
+    }
+}
