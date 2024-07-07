@@ -11,7 +11,6 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { GoogleIcon, SlackIcon } from "../auth-icons";
-import { MagicLinkForm } from "./magic-link-form";
 import { Mail, UserPlus } from "lucide-react";
 import { btnStyles } from "@/styles/icons";
 import { SectionSeparator } from "@/components/section-separator";
@@ -48,8 +47,6 @@ export default function SignInPage() {
                             <SlackIcon className="mr-2 h-5 w-5 invert dark:invert-0" />
                             Sign in with Slack
                         </Link>
-                        <SectionSeparator label="Or sign in with email" />
-                        <MagicLinkForm />
                         <SectionSeparator label="Other options" />
                         <div className="flex flex-wrap justify-center gap-2">
                             <Button
