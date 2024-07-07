@@ -2,7 +2,9 @@ import { generateRandomToken } from "@/data/utils";
 import { db } from "@/db";
 import { verifyEmailTokens } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { TOKEN_LENGTH, TOKEN_TTL } from "./magic-links";
+
+export const TOKEN_LENGTH = 32;
+export const TOKEN_TTL = 1000 * 60 * 5; // 5 minutes
 
 export async function createVerifyEmailToken(userId: string) {
     const token = await generateRandomToken(TOKEN_LENGTH);

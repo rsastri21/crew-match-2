@@ -61,16 +61,6 @@ export const sessions = pgTable("session", {
     }).notNull(),
 });
 
-export const magicLinks = pgTable("magic_links", {
-    id: serial("id").primaryKey(),
-    email: text("email").notNull().unique(),
-    token: text("token"),
-    tokenExpiresAt: timestamp("token_expires_at", {
-        withTimezone: true,
-        mode: "date",
-    }),
-});
-
 export const resetTokens = pgTable("reset_tokens", {
     id: serial("id").primaryKey(),
     userId: text("user_id")

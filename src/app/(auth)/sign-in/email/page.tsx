@@ -18,7 +18,7 @@ import { useServerAction } from "zsa-react";
 import { LoaderButton } from "@/components/loader-button";
 import { useToast } from "@/components/ui/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Terminal } from "lucide-react";
 import {
     Card,
@@ -106,7 +106,18 @@ export default function SignInPage() {
                                     name="password"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Password</FormLabel>
+                                            <div className="flex flex-wrap justify-between items-center">
+                                                <FormLabel>Password</FormLabel>
+                                                <Button
+                                                    asChild
+                                                    variant="link"
+                                                    className="p-0 w-fit h-fit text-muted-foreground"
+                                                >
+                                                    <Link href="/sign-in/forgot-password">
+                                                        Forgot Password?
+                                                    </Link>
+                                                </Button>
+                                            </div>
                                             <FormControl>
                                                 <Input
                                                     {...field}

@@ -10,11 +10,13 @@ import {
     EmailInUseError,
     LoginError,
     NotFoundError,
+    TokenExpiredError,
 } from "./errors";
 import {
     createAccount,
     createAccountViaGoogle,
     createAccountViaSlack,
+    updatePassword,
 } from "@/data/accounts";
 import { createProfile, getProfile } from "@/data/profiles";
 import {
@@ -26,6 +28,12 @@ import { sendEmail } from "@/lib/email";
 import { VerifyEmail } from "@/emails/verify-email";
 import { GoogleUser } from "@/app/api/login/google/callback/route";
 import { SlackUser } from "@/app/api/login/slack/callback/route";
+import {
+    createPasswordResetToken,
+    deletePasswordResetToken,
+    getPasswordResetToken,
+} from "@/data/reset-tokens";
+import { ResetPasswordEmail } from "@/emails/reset-password";
 
 export async function registerUser(
     name: string,
@@ -127,4 +135,36 @@ export async function verifyEmail(token: string) {
     await deleteVerifyEmailToken(token);
 
     return { id: user.id, role: user.role };
+}
+
+export async function resetPassword(email: string) {
+    const user = await getUserByEmail(email);
+
+    if (!user) {
+        throw new AccountNotFoundError();
+    }
+
+    const token = await createPasswordResetToken(user.id);
+
+    await sendEmail(
+        email,
+        "Your password reset link for Crew Match",
+        <ResetPasswordEmail token={token} />
+    );
+}
+
+export async function changePassword(token: string, password: string) {
+    const tokenEntry = await getPasswordResetToken(token);
+
+    if (!tokenEntry) {
+        throw new NotFoundError();
+    }
+
+    if (tokenEntry.tokenExpiresAt < new Date()) {
+        throw new TokenExpiredError();
+    }
+
+    const userId = tokenEntry.userId;
+    await deletePasswordResetToken(token);
+    await updatePassword(userId, password);
 }
