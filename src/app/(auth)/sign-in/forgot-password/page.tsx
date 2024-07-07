@@ -31,26 +31,23 @@ const resetPasswordSchema = z.object({
 export default function ForgotPasswordPage() {
     const { toast } = useToast();
 
-    const { execute, isPending, isSuccess } = useServerAction(
-        resetPasswordAction,
-        {
-            onError({ err }) {
-                toast({
-                    title: "Something went wrong",
-                    description: err.message,
-                    variant: "destructive",
-                });
-            },
-            onSuccess() {
-                toast({
-                    title: "Reset link sent!",
-                    description:
-                        "Check your inbox for a link to reset your password.",
-                    variant: "success",
-                });
-            },
-        }
-    );
+    const { execute, isPending } = useServerAction(resetPasswordAction, {
+        onError({ err }) {
+            toast({
+                title: "Something went wrong",
+                description: err.message,
+                variant: "destructive",
+            });
+        },
+        onSuccess() {
+            toast({
+                title: "Reset link sent!",
+                description:
+                    "Check your inbox for a link to reset your password.",
+                variant: "success",
+            });
+        },
+    });
 
     const form = useForm<z.infer<typeof resetPasswordSchema>>({
         resolver: zodResolver(resetPasswordSchema),

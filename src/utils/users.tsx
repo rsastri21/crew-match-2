@@ -8,6 +8,7 @@ import {
     AccountNotFoundError,
     AuthenticationError,
     EmailInUseError,
+    IncorrectAccountTypeError,
     LoginError,
     NotFoundError,
     TokenExpiredError,
@@ -16,6 +17,7 @@ import {
     createAccount,
     createAccountViaGoogle,
     createAccountViaSlack,
+    getAccountByUserId,
     updatePassword,
 } from "@/data/accounts";
 import { createProfile, getProfile } from "@/data/profiles";
@@ -67,7 +69,7 @@ export async function signInUser(email: string, password: string) {
         throw new AccountNotFoundError();
     }
 
-    const isPasswordCorrect = verifyPassword(email, password);
+    const isPasswordCorrect = await verifyPassword(email, password);
 
     if (!isPasswordCorrect) {
         throw new LoginError();
@@ -142,6 +144,12 @@ export async function resetPassword(email: string) {
 
     if (!user) {
         throw new AccountNotFoundError();
+    }
+
+    const account = await getAccountByUserId(user.id);
+
+    if (account!.accountType !== "email") {
+        throw new IncorrectAccountTypeError();
     }
 
     const token = await createPasswordResetToken(user.id);

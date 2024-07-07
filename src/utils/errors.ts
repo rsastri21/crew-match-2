@@ -45,3 +45,12 @@ export class AccountNotFoundError extends PublicError {
         this.name = "AccountNotFoundError";
     }
 }
+
+export class IncorrectAccountTypeError extends PublicError {
+    constructor() {
+        super(
+            "Account is not of type email. Try signing in with Google or Slack."
+        );
+        this.name = "IncorrectAccountTypeError";
+    }
+}
