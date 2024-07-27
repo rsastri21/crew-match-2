@@ -1,4 +1,7 @@
+import { relations } from "drizzle-orm";
 import {
+    boolean,
+    integer,
     pgEnum,
     pgTable,
     serial,
@@ -24,6 +27,101 @@ export const users = pgTable("user", {
     }),
     role: roleEnum("role").notNull().default("user"),
 });
+
+export const usersRelations = relations(users, ({ one }) => ({
+    candidate: one(candidates),
+    production: one(productions),
+}));
+
+export const candidates = pgTable("candidates", {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 256 }).notNull(),
+    userId: text("user_id")
+        .references(() => users.id, { onDelete: "set null" })
+        .unique(),
+    yearsInUW: integer("years_in_uw").notNull().default(0),
+    quartersInLUX: integer("quarters_in_lux").notNull().default(0),
+    isActing: boolean("is_acting").notNull(),
+    prioritizeProductions: boolean("prioritize_productions").notNull(),
+    interestedProductions: text("interested_productions").array(),
+    interestedRoles: text("interested_roles").array(),
+    createdAt: timestamp("created_at", {
+        withTimezone: true,
+        mode: "date",
+    })
+        .notNull()
+        .defaultNow(),
+    updatedAt: timestamp("updated_at", {
+        withTimezone: true,
+        mode: "date",
+    })
+        .notNull()
+        .defaultNow(),
+});
+
+export const candidatesRelations = relations(candidates, ({ many, one }) => ({
+    roles: many(roles),
+    user: one(users, {
+        fields: [candidates.userId],
+        references: [users.id],
+    }),
+}));
+
+export const productions = pgTable("productions", {
+    id: serial("id").primaryKey(),
+    userId: text("user_id")
+        .references(() => users.id, { onDelete: "cascade" })
+        .unique(),
+    name: varchar("name", { length: 256 }).notNull(),
+    genre: text("genre").notNull(),
+    logline: text("logline").notNull(),
+    logistics: text("logistics").notNull(),
+    lookingFor: text("looking_for").notNull(),
+    pitchLink: text("pitch_link").notNull(),
+    createdAt: timestamp("created_at", {
+        withTimezone: true,
+        mode: "date",
+    })
+        .notNull()
+        .defaultNow(),
+    updatedAt: timestamp("updated_at", {
+        withTimezone: true,
+        mode: "date",
+    })
+        .notNull()
+        .defaultNow(),
+});
+
+export const productionsRelations = relations(productions, ({ many, one }) => ({
+    roles: many(roles),
+    user: one(users, {
+        fields: [productions.userId],
+        references: [users.id],
+    }),
+}));
+
+export const roles = pgTable("roles", {
+    id: serial("id").primaryKey(),
+    role: text("role").notNull(),
+    production: text("production").notNull(),
+    productionId: integer("production_id")
+        .notNull()
+        .references(() => productions.id, { onDelete: "cascade" }),
+    candidateId: integer("candidate_id").references(() => candidates.id, {
+        onDelete: "set null",
+    }),
+});
+
+export const rolesRelations = relations(roles, ({ one }) => ({
+    production: one(productions, {
+        fields: [roles.productionId],
+        references: [productions.id],
+    }),
+    candidate: one(candidates, {
+        fields: [roles.candidateId],
+        references: [candidates.id],
+    }),
+}));
 
 export const accounts = pgTable("accounts", {
     id: serial("id").primaryKey(),
