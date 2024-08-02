@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getUserProfile } from "@/utils/users";
 import { Suspense, cache } from "react";
 import { getCurrentUser } from "@/lib/session";
-import { Loader2Icon, LogOut } from "lucide-react";
+import { House, Loader2Icon, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     DropdownMenu,
@@ -14,6 +14,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getDashboardUrl } from "@/utils/redirects";
 
 const profileLoader = cache(getUserProfile);
 
@@ -62,7 +63,13 @@ async function ProfileAvatar({ userId }: { userId: string }) {
     );
 }
 
-async function ProfileDropdown({ userId }: { userId: string }) {
+async function ProfileDropdown({
+    userId,
+    role,
+}: {
+    userId: string;
+    role: string;
+}) {
     const profile = await profileLoader(userId);
     return (
         <DropdownMenu>
@@ -81,6 +88,15 @@ async function ProfileDropdown({ userId }: { userId: string }) {
             <DropdownMenuContent className="space-y-2">
                 <DropdownMenuLabel>{profile.name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link
+                        className="flex items-center"
+                        href={getDashboardUrl(role)}
+                    >
+                        <House className="w-4 h-4 mr-2" />
+                        Dashboard
+                    </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild className="cursor-pointer">
                     <Link className="flex items-center" href={"/api/sign-out"}>
                         <LogOut className="w-4 h-4 mr-2" />
@@ -101,7 +117,7 @@ async function HeaderActions() {
             {isSignedIn ? (
                 <>
                     <ModeToggle />
-                    <ProfileDropdown userId={user.id} />
+                    <ProfileDropdown userId={user.id} role={user.role} />
                 </>
             ) : (
                 <>

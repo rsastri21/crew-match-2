@@ -2,6 +2,7 @@ import { getUserById } from "@/data/users";
 import { slackAuth } from "@/lib/auth";
 import { setSession } from "@/lib/session";
 import { getAccountBySlackIdUseCase } from "@/utils/accounts";
+import { getDashboardUrl } from "@/utils/redirects";
 import { createSlackUser } from "@/utils/users";
 import { OAuth2RequestError } from "arctic";
 import { User } from "lucia";
@@ -40,7 +41,7 @@ export async function GET(request: Request): Promise<Response> {
             return new Response(null, {
                 status: 302,
                 headers: {
-                    Location: "/",
+                    Location: getDashboardUrl(existingUser!.role),
                 },
             });
         }
@@ -62,7 +63,7 @@ export async function GET(request: Request): Promise<Response> {
         return new Response(null, {
             status: 302,
             headers: {
-                Location: "/",
+                Location: getDashboardUrl(user.role),
             },
         });
     } catch (e) {

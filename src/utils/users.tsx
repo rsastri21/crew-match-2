@@ -1,5 +1,6 @@
 import {
     createUser,
+    getCompleteUserInfo,
     getUserByEmail,
     updateUser,
     verifyPassword,
@@ -122,6 +123,16 @@ export async function getUserProfile(userId: string) {
     }
 
     return profile;
+}
+
+export async function getUserCandidateProfile(userId: string) {
+    const user = await getCompleteUserInfo(userId);
+
+    if (!user) {
+        throw new NotFoundError();
+    }
+
+    return user;
 }
 
 export async function verifyEmail(token: string) {

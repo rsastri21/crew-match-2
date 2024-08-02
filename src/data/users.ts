@@ -53,6 +53,18 @@ export async function getUserById(userId: string) {
     return user;
 }
 
+export async function getCompleteUserInfo(userId: string) {
+    const user = await db.query.users.findFirst({
+        where: eq(users.id, userId),
+        with: {
+            candidate: true,
+            profile: true,
+        },
+    });
+
+    return user;
+}
+
 export async function setEmailVerified(userId: string, trx = db) {
     await trx
         .update(users)

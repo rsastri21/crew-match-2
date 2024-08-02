@@ -2,6 +2,7 @@
 
 import { unauthenticatedAction } from "@/lib/safe-action";
 import { setSession } from "@/lib/session";
+import { getDashboardUrl } from "@/utils/redirects";
 import { signInUser } from "@/utils/users";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -17,5 +18,5 @@ export const signInAction = unauthenticatedAction
     .handler(async ({ input }) => {
         const user = await signInUser(input.email, input.password);
         await setSession(user.id, user.role);
-        redirect("/");
+        redirect(getDashboardUrl(user.role));
     });

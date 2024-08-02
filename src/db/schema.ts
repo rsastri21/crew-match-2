@@ -31,6 +31,7 @@ export const users = pgTable("user", {
 export const usersRelations = relations(users, ({ one }) => ({
     candidate: one(candidates),
     production: one(productions),
+    profile: one(profiles),
 }));
 
 export const candidates = pgTable("candidates", {
@@ -148,6 +149,13 @@ export const profiles = pgTable("profiles", {
     pronouns: varchar("pronouns", { length: 256 }),
 });
 
+export const profilesRelations = relations(profiles, ({ one }) => ({
+    user: one(users, {
+        fields: [profiles.userId],
+        references: [users.id],
+    }),
+}));
+
 export const sessions = pgTable("session", {
     id: text("id").primaryKey(),
     userId: text("user_id")
@@ -187,3 +195,9 @@ export const verifyEmailTokens = pgTable("verify_email_tokens", {
 
 export type User = typeof users.$inferSelect;
 export type Profile = typeof profiles.$inferSelect;
+export type Candidate = typeof candidates.$inferSelect;
+export type UserWithCandidateProfile = User & {
+    candidate: Candidate | null;
+    profile: Profile | null;
+};
+export type Role = typeof roles.$inferSelect;
