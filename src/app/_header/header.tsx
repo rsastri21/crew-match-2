@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getUserProfile } from "@/utils/users";
 import { Suspense, cache } from "react";
 import { getCurrentUser } from "@/lib/session";
-import { House, Loader2Icon, LogOut } from "lucide-react";
+import { House, Loader2Icon, LogOut, SquarePen } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     DropdownMenu,
@@ -95,6 +95,15 @@ async function ProfileDropdown({
                     >
                         <House className="w-4 h-4 mr-2" />
                         Dashboard
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link
+                        className="flex items-center"
+                        href="/candidate/register"
+                    >
+                        <SquarePen className="w-4 h-4 mr-2" />
+                        Registration
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="cursor-pointer">

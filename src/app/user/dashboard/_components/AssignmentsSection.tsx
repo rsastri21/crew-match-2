@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Role } from "@/db/schema";
-import SectionHeading from "./SectionHeading";
-import SectionRow from "../SectionRow";
+import SectionHeading from "../../../../components/SectionHeading";
+import SectionRow from "../../../../components/SectionRow";
 
 const assignments: Role[] = [
     {
@@ -30,7 +30,9 @@ const assignments: Role[] = [
 export default function AssignmentsSection() {
     return (
         <div className="w-full flex flex-col gap-2 pb-6 md:justify-center items-center">
-            <SectionHeading title="My Assignments" />
+            <div className="w-full flex justify-start">
+                <SectionHeading title="My Assignments" />
+            </div>
             <SectionRow<Role>
                 data={assignments}
                 blankText="No assignments to display."
@@ -51,7 +53,7 @@ function AssignmentCard(assignment: Role) {
                     {assignment.role}
                 </p>
                 <p className="text-xs font-light text-muted-foreground w-fit h-fit">
-                    Click to view this production's page
+                    Click to view this production&apos;s page
                 </p>
             </CardContent>
         </Card>

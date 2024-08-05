@@ -1,7 +1,17 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import SectionHeading from "./SectionHeading";
-import SectionRow from "../SectionRow";
+import SectionHeading from "../../../../components/SectionHeading";
+import SectionRow from "../../../../components/SectionRow";
 import { UserWithCandidateProfile } from "@/db/schema";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
 
 interface CardRow {
     label: string;
@@ -72,7 +82,35 @@ export default function RegistrationSection(
 
     return (
         <div className="w-full flex flex-col gap-2 py-4 md:justify-center items-center">
-            <SectionHeading title="Registration Information" />
+            <div className="w-full flex flex-wrap justify-between items-center">
+                <div className="flex items-center">
+                    <SectionHeading title="Registration Information" />
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Info className="w-4 h-4 text-muted-foreground" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>
+                                    Pronouns are part of your user profile. Edit
+                                    your profile to modify this property.
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
+                <Link
+                    href="/candidate/register"
+                    className={cn(
+                        buttonVariants({ variant: "default" }),
+                        "mx-2",
+                        "w-full",
+                        "md:w-fit"
+                    )}
+                >
+                    Edit Information
+                </Link>
+            </div>
             <SectionRow<RegistrationCardProps>
                 data={userInfo.candidate ? registrationData : []}
                 blankText="Not yet registered."
@@ -84,7 +122,7 @@ export default function RegistrationSection(
 
 function RegistrationCard({ title, content }: RegistrationCardProps) {
     return (
-        <Card className="w-full md:w-64 h-52 shadow-md">
+        <Card className="w-full md:flex-1 min-w-fit h-52 shadow-md">
             <CardHeader className="p-4 h-fit">
                 <h1 className="font-semibold text-md">{title}</h1>
             </CardHeader>
