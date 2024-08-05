@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 
 export async function createCandidate(
     name: string,
-    userId: string,
+    userId: string | null,
     isActing: boolean,
     prioritizeProductions: boolean,
     yearsInUW?: number,
@@ -37,6 +37,22 @@ export async function updateCandidate(
         .set(updatedCandidate)
         .where(eq(candidates.id, candidateId))
         .returning();
+    return candidate;
+}
+
+export async function getCandidateByUserId(userId: string) {
+    const candidate = await db.query.candidates.findFirst({
+        where: eq(candidates.userId, userId),
+    });
+
+    return candidate;
+}
+
+export async function getCandidateByName(name: string) {
+    const candidate = await db.query.candidates.findFirst({
+        where: eq(candidates.name, name),
+    });
+
     return candidate;
 }
 

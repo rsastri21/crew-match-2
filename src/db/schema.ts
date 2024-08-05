@@ -36,7 +36,7 @@ export const usersRelations = relations(users, ({ one }) => ({
 
 export const candidates = pgTable("candidates", {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }).notNull(),
+    name: varchar("name", { length: 256 }).notNull().unique(),
     userId: text("user_id")
         .references(() => users.id, { onDelete: "set null" })
         .unique(),
