@@ -2,15 +2,21 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Role } from "@/db/schema";
 import SectionHeading from "../../../../components/SectionHeading";
 import SectionRow from "../../../../components/SectionRow";
+import { getCandidateAssignments } from "@/data/candidates";
+import { getCurrentUser } from "@/lib/session";
 
-export default function AssignmentsSection() {
+export default async function AssignmentsSection() {
+    const user = await getCurrentUser();
+    // User will be defined as this component is only rendered when a user is signed in
+    const assignments = await getCandidateAssignments(user!.id);
+
     return (
         <div className="w-full flex flex-col gap-2 pb-6 md:justify-center items-center">
             <div className="w-full flex justify-start">
                 <SectionHeading title="My Assignments" />
             </div>
             <SectionRow<Role>
-                data={[]}
+                data={assignments}
                 blankText="No assignments to display."
                 sectionCard={AssignmentCard}
             />

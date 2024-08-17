@@ -40,6 +40,16 @@ export async function updateCandidate(
     return candidate;
 }
 
+export async function getCandidateAssignments(userId: string) {
+    const candidate = await db.query.candidates.findFirst({
+        where: eq(candidates.userId, userId),
+        with: {
+            roles: true,
+        },
+    });
+    return candidate?.roles ?? [];
+}
+
 export async function getCandidateByUserId(userId: string) {
     const candidate = await db.query.candidates.findFirst({
         where: eq(candidates.userId, userId),
