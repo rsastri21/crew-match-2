@@ -15,7 +15,10 @@ export const createCandidateAction = authenticatedAction
             quartersInLUX: z.number().nonnegative(),
             isActing: z.boolean(),
             prioritizeProductions: z.boolean(),
-            interestedRoles: z.string().array().max(3),
+            interestedRoles: z
+                .string()
+                .array()
+                .max(3, { message: "Please rank 3 roles." }),
             interestedProductions: z.string().array(),
         })
     )

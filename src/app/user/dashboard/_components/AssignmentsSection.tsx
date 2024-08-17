@@ -3,30 +3,6 @@ import { Role } from "@/db/schema";
 import SectionHeading from "../../../../components/SectionHeading";
 import SectionRow from "../../../../components/SectionRow";
 
-const assignments: Role[] = [
-    {
-        id: 1,
-        role: "Editor",
-        production: "Pink Robots",
-        productionId: 1,
-        candidateId: 1,
-    },
-    {
-        id: 2,
-        role: "Director",
-        production: "Pink Robots",
-        productionId: 1,
-        candidateId: 1,
-    },
-    {
-        id: 3,
-        role: "Editor",
-        production: "Dead Serious",
-        productionId: 2,
-        candidateId: 1,
-    },
-];
-
 export default function AssignmentsSection() {
     return (
         <div className="w-full flex flex-col gap-2 pb-6 md:justify-center items-center">
@@ -34,7 +10,7 @@ export default function AssignmentsSection() {
                 <SectionHeading title="My Assignments" />
             </div>
             <SectionRow<Role>
-                data={assignments}
+                data={[]}
                 blankText="No assignments to display."
                 sectionCard={AssignmentCard}
             />
