@@ -2,9 +2,7 @@ import { getCurrentUser } from "@/lib/session";
 import { getUserCandidateProfile } from "@/utils/users";
 import { redirect } from "next/navigation";
 import UserDashboardClient from "./_components/UserDashboard.client";
-import RegistrationSection from "./_components/RegistrationSection";
-import AssignmentsSection from "./_components/AssignmentsSection";
-import { Separator } from "@/components/ui/separator";
+import { getCandidateAssignments } from "@/data/candidates";
 
 export default async function UserDashboard() {
     const user = await getCurrentUser();
@@ -14,12 +12,7 @@ export default async function UserDashboard() {
     }
 
     const userInfo = await getUserCandidateProfile(user.id);
+    const assignments = await getCandidateAssignments(user.id);
 
-    return (
-        <UserDashboardClient user={userInfo}>
-            <AssignmentsSection />
-            <Separator />
-            <RegistrationSection {...userInfo} />
-        </UserDashboardClient>
-    );
+    return <UserDashboardClient user={userInfo} assignments={assignments} />;
 }

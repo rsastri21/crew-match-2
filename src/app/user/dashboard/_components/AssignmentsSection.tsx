@@ -5,11 +5,11 @@ import SectionRow from "../../../../components/SectionRow";
 import { getCandidateAssignments } from "@/data/candidates";
 import { getCurrentUser } from "@/lib/session";
 
-export default async function AssignmentsSection() {
-    const user = await getCurrentUser();
-    // User will be defined as this component is only rendered when a user is signed in
-    const assignments = await getCandidateAssignments(user!.id);
-
+export default function AssignmentsSection({
+    assignments,
+}: {
+    assignments: Role[];
+}) {
     return (
         <div className="w-full flex flex-col gap-2 pb-6 md:justify-center items-center">
             <div className="w-full flex justify-start">

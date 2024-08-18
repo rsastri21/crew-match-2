@@ -1,12 +1,11 @@
 "use client";
 
-import { UserWithCandidateProfile } from "@/db/schema";
+import { Role, UserWithCandidateProfile } from "@/db/schema";
 import UserWelcomeHeading from "./UserWelcomeHeading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import AssignmentsSection from "./AssignmentsSection";
 import RegistrationSection from "./RegistrationSection";
-import { PropsWithChildren } from "react";
 
 const mockUser: UserWithCandidateProfile = {
     id: "testId",
@@ -41,8 +40,9 @@ const mockUser: UserWithCandidateProfile = {
     emailVerified: null,
 };
 
-export interface UserDashboardClientProps extends PropsWithChildren {
+export interface UserDashboardClientProps {
     user: UserWithCandidateProfile;
+    assignments: Role[];
 }
 
 export default function UserDashboardClient(props: UserDashboardClientProps) {
@@ -65,7 +65,9 @@ export default function UserDashboardClient(props: UserDashboardClientProps) {
                 </div>
                 <Separator />
                 <TabsContent className="w-full" value="profile">
-                    {props.children}
+                    <AssignmentsSection assignments={props.assignments} />
+                    <Separator />
+                    <RegistrationSection {...props.user} />
                 </TabsContent>
             </div>
         </Tabs>
