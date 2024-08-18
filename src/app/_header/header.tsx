@@ -100,7 +100,7 @@ async function ProfileDropdown({
                 <DropdownMenuItem asChild className="cursor-pointer">
                     <Link
                         className="flex items-center"
-                        href="/candidate/register"
+                        href="/candidate/discover"
                     >
                         <SquarePen className="w-4 h-4 mr-2" />
                         Registration

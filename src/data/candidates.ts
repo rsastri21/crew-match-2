@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { Candidate, candidates } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, ilike } from "drizzle-orm";
 
 export async function createCandidate(
     name: string,
@@ -64,6 +64,16 @@ export async function getCandidateByName(name: string) {
     });
 
     return candidate;
+}
+
+export async function getCandidatesBySimilarName(name: string) {
+    const matchingCandidates = await db.query.candidates.findMany({
+        where: ilike(
+            candidates.name,
+            `${name.charAt(0)}%${name.charAt(name.length)}`
+        ),
+    });
+    return matchingCandidates;
 }
 
 export async function deleteCandidate(candidateId: number) {

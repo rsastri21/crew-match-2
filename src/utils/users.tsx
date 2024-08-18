@@ -37,6 +37,7 @@ import {
     getPasswordResetToken,
 } from "@/data/reset-tokens";
 import { ResetPasswordEmail } from "@/emails/reset-password";
+import { cache } from "react";
 
 export async function registerUser(
     name: string,
@@ -125,7 +126,7 @@ export async function getUserProfile(userId: string) {
     return profile;
 }
 
-export async function getUserCandidateProfile(userId: string) {
+async function getUserWithCandidateProfile(userId: string) {
     const user = await getCompleteUserInfo(userId);
 
     if (!user) {
@@ -134,6 +135,8 @@ export async function getUserCandidateProfile(userId: string) {
 
     return user;
 }
+
+export const getUserCandidateProfile = cache(getUserWithCandidateProfile);
 
 export async function verifyEmail(token: string) {
     const tokenEntry = await getVerifyEmailToken(token);

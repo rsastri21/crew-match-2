@@ -100,7 +100,11 @@ export default function RegistrationSection(
                     </TooltipProvider>
                 </div>
                 <Link
-                    href="/candidate/register"
+                    href={
+                        userInfo.candidate
+                            ? "/candidate/register"
+                            : "/candidate/discover"
+                    }
                     className={cn(
                         buttonVariants({ variant: "default" }),
                         "mx-2",
