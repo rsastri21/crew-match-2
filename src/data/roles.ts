@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { Role, roles } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export async function createRole(
     roleName: string,
@@ -34,6 +34,23 @@ export async function getRolesByProduction(productionId: number) {
         where: eq(roles.productionId, productionId),
     });
     return productionRoles;
+}
+
+export async function getProductionDirectorName(productionId: number) {
+    const directorRole = await db.query.roles.findFirst({
+        where: and(
+            eq(roles.productionId, productionId),
+            eq(roles.role, "Director")
+        ),
+        with: {
+            candidate: {
+                columns: {
+                    name: true,
+                },
+            },
+        },
+    });
+    return directorRole?.candidate?.name;
 }
 
 export async function deleteRole(roleId: number) {

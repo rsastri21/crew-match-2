@@ -1,48 +1,22 @@
 "use client";
 
-import { Role, UserWithCandidateProfile } from "@/db/schema";
+import {
+    ProductionWithRoles,
+    Role,
+    UserWithCandidateProfile,
+} from "@/db/schema";
 import UserWelcomeHeading from "./UserWelcomeHeading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import AssignmentsSection from "./AssignmentsSection";
 import RegistrationSection from "./RegistrationSection";
-
-const mockUser: UserWithCandidateProfile = {
-    id: "testId",
-    role: "user",
-    candidate: {
-        id: 0,
-        name: "Rohan Sastri",
-        userId: "testId",
-        yearsInUW: 4,
-        quartersInLUX: 12,
-        isActing: false,
-        prioritizeProductions: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        interestedProductions: ["Pink Robots", "Dead Serious", "The Grudge"],
-        interestedRoles: [
-            "Editor",
-            "Director",
-            "Director of Photography",
-            "Producer",
-        ],
-    },
-    profile: {
-        id: 0,
-        userId: "testId",
-        name: "Rohan Sastri",
-        imageId: null,
-        pronouns: "he/him",
-        image: "test",
-    },
-    email: "rsastri21@gmail.com",
-    emailVerified: null,
-};
+import ProductionsSection from "./ProductionsSection";
 
 export interface UserDashboardClientProps {
     user: UserWithCandidateProfile;
     assignments: Role[];
+    productions: ProductionWithRoles[];
+    directors: string[];
 }
 
 export default function UserDashboardClient(props: UserDashboardClientProps) {
@@ -68,6 +42,12 @@ export default function UserDashboardClient(props: UserDashboardClientProps) {
                     <AssignmentsSection assignments={props.assignments} />
                     <Separator />
                     <RegistrationSection {...props.user} />
+                </TabsContent>
+                <TabsContent className="w-full" value="productions">
+                    <ProductionsSection
+                        productions={props.productions}
+                        directors={props.directors}
+                    />
                 </TabsContent>
             </div>
         </Tabs>

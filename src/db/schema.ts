@@ -196,8 +196,17 @@ export const verifyEmailTokens = pgTable("verify_email_tokens", {
 export type User = typeof users.$inferSelect;
 export type Profile = typeof profiles.$inferSelect;
 export type Candidate = typeof candidates.$inferSelect;
+export type Production = typeof productions.$inferSelect;
 export type UserWithCandidateProfile = User & {
     candidate: Candidate | null;
     profile: Profile | null;
 };
 export type Role = typeof roles.$inferSelect;
+export type RoleWithCandidateName = Role & {
+    candidate: {
+        name: string;
+    } | null;
+};
+export type ProductionWithRoles = Production & {
+    roles: RoleWithCandidateName[];
+};

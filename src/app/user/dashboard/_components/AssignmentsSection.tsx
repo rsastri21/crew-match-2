@@ -2,8 +2,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Role } from "@/db/schema";
 import SectionHeading from "../../../../components/SectionHeading";
 import SectionRow from "../../../../components/SectionRow";
-import { getCandidateAssignments } from "@/data/candidates";
-import { getCurrentUser } from "@/lib/session";
 
 export default function AssignmentsSection({
     assignments,
