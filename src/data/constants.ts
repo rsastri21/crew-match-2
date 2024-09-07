@@ -20,6 +20,19 @@ export const ROLES = [
     "Soundtrack",
 ];
 
+export const VARIANTS = {
+    small: {
+        heading: "text-base",
+        paragraph: "text-sm",
+    },
+    large: {
+        heading: "text-xl",
+        paragraph: "text-md",
+    },
+};
+
+export type variant = "small" | "large";
+
 export const mockProductionsWithRoles: ProductionWithRoles[] = [
     {
         id: 1,

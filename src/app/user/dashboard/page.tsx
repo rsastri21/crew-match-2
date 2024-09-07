@@ -3,7 +3,10 @@ import { getUserCandidateProfile } from "@/utils/users";
 import { redirect } from "next/navigation";
 import UserDashboardClient from "./_components/UserDashboard.client";
 import { getCandidateAssignments } from "@/data/candidates";
-import { mockProductionsWithRoles } from "@/data/constants";
+import {
+    getDirectorsForProductions,
+    getProductionsInformation,
+} from "@/utils/productions";
 
 export default async function UserDashboard() {
     const user = await getCurrentUser();
@@ -14,13 +17,15 @@ export default async function UserDashboard() {
 
     const userInfo = await getUserCandidateProfile(user.id);
     const assignments = await getCandidateAssignments(user.id);
+    const productionsWithRoles = await getProductionsInformation();
+    const directors = await getDirectorsForProductions(productionsWithRoles);
 
     return (
         <UserDashboardClient
             user={userInfo}
             assignments={assignments}
-            productions={mockProductionsWithRoles}
-            directors={["Bella Quilici", "Andrew Shearer"]}
+            productions={productionsWithRoles}
+            directors={directors}
         />
     );
 }

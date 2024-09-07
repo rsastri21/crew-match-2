@@ -65,6 +65,25 @@ export async function getAllProductionsWithRoles() {
     return productions;
 }
 
+export async function getProductionWithRoles(productionId: number) {
+    const production = await db.query.productions.findFirst({
+        where: eq(productions.id, productionId),
+        with: {
+            roles: {
+                with: {
+                    candidate: {
+                        columns: {
+                            name: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    return production;
+}
+
 export async function deleteProduction(productionId: number) {
     await db.delete(productions).where(eq(productions.id, productionId));
 }

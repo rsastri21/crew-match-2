@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ChevronRight } from "lucide-react";
+import useWindowSize from "@/hooks/useWindowSize";
+import { ChevronRight, ExternalLink } from "lucide-react";
 
 export interface ProductionInfoCardProps {
     productionName: string;
@@ -12,6 +13,7 @@ export interface ProductionInfoCardProps {
 }
 
 export default function ProductionInfoCard(props: ProductionInfoCardProps) {
+    const [windowWidth, windowHeight] = useWindowSize();
     const productionFillValue =
         (props.capacity.filled / props.capacity.total) * 100;
 
@@ -35,7 +37,11 @@ export default function ProductionInfoCard(props: ProductionInfoCardProps) {
                         <></>
                     )}
                 </div>
-                <ChevronRight className="w-6 h-6" />
+                {windowWidth <= 768 ? (
+                    <ExternalLink className="w-6 h-6" />
+                ) : (
+                    <ChevronRight className="w-6 h-6" />
+                )}
             </div>
             <div className="w-full">
                 <p className="text-xs text-muted-foreground p-0.5">

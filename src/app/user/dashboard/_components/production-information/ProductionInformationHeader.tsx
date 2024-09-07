@@ -7,6 +7,7 @@ export interface ProductionInformationHeaderProps {
     name: string;
     director: string;
     pitchLink: string;
+    id: number;
 }
 
 export default function ProductionInformationHeader(
@@ -15,7 +16,15 @@ export default function ProductionInformationHeader(
     return (
         <CardHeader className="p-0 flex flex-row justify-between items-center">
             <div className="space-y-0.5">
-                <h1 className="text-xl font-semibold">{props.name}</h1>
+                <Link
+                    href={`/production/${props.id}/view`}
+                    className={cn(
+                        buttonVariants({ variant: "link" }),
+                        "text-xl font-semibold p-0"
+                    )}
+                >
+                    {props.name}
+                </Link>
                 <p className="text-muted-foreground text-sm font-medium">
                     Directed by: {props.director}
                 </p>

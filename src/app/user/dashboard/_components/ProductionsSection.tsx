@@ -4,6 +4,8 @@ import ProductionInfoCard from "./ProductionInfoCard";
 import { Separator } from "@/components/ui/separator";
 import ProductionOverviewCard from "./production-information/ProductionOverviewCard";
 import { useState } from "react";
+import useWindowSize from "@/hooks/useWindowSize";
+import { useRouter } from "next/navigation";
 
 export function getAmountFilled(roles: RoleWithCandidateName[]): {
     filled: number;
@@ -29,9 +31,16 @@ export default function ProductionsSection({
     directors: string[];
 }) {
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
+    const [windowWidth, windowHeight] = useWindowSize();
+    const router = useRouter();
+    const isSmallFormatDisplay = windowWidth <= 768;
 
     const handleSelectProduction = (index: number) => {
         setSelectedIndex(index);
+    };
+
+    const handleSelectProductionSmallWindow = (id: number) => {
+        router.push(`/production/${id}/view`);
     };
 
     return (
@@ -52,9 +61,19 @@ export default function ProductionsSection({
                                 productionName={production.name}
                                 director={directors[index] ?? ""}
                                 capacity={getAmountFilled(production.roles)}
-                                id={index}
-                                selectProduction={handleSelectProduction}
-                                isSelected={index === selectedIndex}
+                                id={
+                                    isSmallFormatDisplay ? production.id : index
+                                }
+                                selectProduction={
+                                    isSmallFormatDisplay
+                                        ? handleSelectProductionSmallWindow
+                                        : handleSelectProduction
+                                }
+                                isSelected={
+                                    isSmallFormatDisplay
+                                        ? false
+                                        : index === selectedIndex
+                                }
                             />
                         ))}
                     </div>
