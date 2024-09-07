@@ -39,7 +39,7 @@ export default function ProductionInformationHeader(
                 >
                     View pitch
                 </Link>
-                <Button>I'm interested</Button>
+                <Button>I&apos;m interested</Button>
             </div>
         </CardHeader>
     );
