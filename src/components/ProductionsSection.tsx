@@ -1,27 +1,12 @@
 import SectionHeading from "@/components/SectionHeading";
-import { ProductionWithRoles, RoleWithCandidateName } from "@/db/schema";
+import { ProductionWithRoles } from "@/db/schema";
 import ProductionInfoCard from "./ProductionInfoCard";
 import { Separator } from "@/components/ui/separator";
-import ProductionOverviewCard from "./production-information/ProductionOverviewCard";
+import ProductionOverviewCard from "../app/user/dashboard/_components/production-information/ProductionOverviewCard";
 import { useState } from "react";
 import useWindowSize from "@/hooks/useWindowSize";
 import { useRouter } from "next/navigation";
-
-export function getAmountFilled(roles: RoleWithCandidateName[]): {
-    filled: number;
-    total: number;
-} {
-    const total = roles.length;
-    let filled: number = 0;
-
-    for (const role of roles) {
-        if (role.candidateId) {
-            filled += 1;
-        }
-    }
-
-    return { filled, total };
-}
+import { getAmountFilled } from "@/utils/productionClientUtils";
 
 export default function ProductionsSection({
     productions,
@@ -31,9 +16,9 @@ export default function ProductionsSection({
     directors: string[];
 }) {
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
-    const [windowWidth, windowHeight] = useWindowSize();
+    const { width: windowWidth } = useWindowSize();
     const router = useRouter();
-    const isSmallFormatDisplay = windowWidth <= 768;
+    const isSmallFormatDisplay = windowWidth && windowWidth <= 768;
 
     const handleSelectProduction = (index: number) => {
         setSelectedIndex(index);

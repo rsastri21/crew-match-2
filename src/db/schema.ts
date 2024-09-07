@@ -199,6 +199,7 @@ export type Candidate = typeof candidates.$inferSelect;
 export type Production = typeof productions.$inferSelect;
 export type UserWithCandidateProfile = User & {
     candidate: Candidate | null;
+    production: Production | null;
     profile: Profile | null;
 };
 export type Role = typeof roles.$inferSelect;

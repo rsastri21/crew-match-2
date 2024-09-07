@@ -13,7 +13,7 @@ export interface ProductionInfoCardProps {
 }
 
 export default function ProductionInfoCard(props: ProductionInfoCardProps) {
-    const [windowWidth, windowHeight] = useWindowSize();
+    const { width: windowWidth } = useWindowSize();
     const productionFillValue =
         (props.capacity.filled / props.capacity.total) * 100;
 
@@ -37,7 +37,7 @@ export default function ProductionInfoCard(props: ProductionInfoCardProps) {
                         <></>
                     )}
                 </div>
-                {windowWidth <= 768 ? (
+                {windowWidth && windowWidth <= 768 ? (
                     <ExternalLink className="w-6 h-6" />
                 ) : (
                     <ChevronRight className="w-6 h-6" />

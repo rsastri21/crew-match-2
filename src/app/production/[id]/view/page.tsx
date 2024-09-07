@@ -4,7 +4,6 @@ import TopHeading from "@/components/TopHeading";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { mockProductionsWithRoles } from "@/data/constants";
 import { getProductionWithRoles } from "@/data/productions";
 import { getProductionDirectorName } from "@/data/roles";
 import { getCurrentUser } from "@/lib/session";

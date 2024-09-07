@@ -58,6 +58,7 @@ export async function getCompleteUserInfo(userId: string) {
         where: eq(users.id, userId),
         with: {
             candidate: true,
+            production: true,
             profile: true,
         },
     });
