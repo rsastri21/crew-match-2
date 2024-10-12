@@ -16,10 +16,10 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import FormCard from "./FormCard";
+import FormCard from "../../../../components/FormCard";
 import { Input } from "@/components/ui/input";
 
-import FormHelpTip from "./FormHelpTip";
+import FormHelpTip from "../../../../components/FormHelpTip";
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
 import { useDragControls } from "framer-motion";

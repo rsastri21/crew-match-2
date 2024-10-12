@@ -2,6 +2,13 @@ import { db } from "@/db";
 import { Role, roles } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 
+export type PendingCreateRole = {
+    role: string;
+    production: string;
+    productionId: number;
+    candidateId?: number;
+};
+
 export async function createRole(
     roleName: string,
     production: string,
@@ -18,6 +25,14 @@ export async function createRole(
         })
         .returning();
     return role;
+}
+
+export async function createRoles(rolesToCreate: PendingCreateRole[]) {
+    const createdRoles = await db
+        .insert(roles)
+        .values(rolesToCreate)
+        .returning();
+    return createdRoles;
 }
 
 export async function updateRole(roleId: number, updatedRole: Partial<Role>) {
