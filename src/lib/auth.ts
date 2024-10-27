@@ -1,73 +1,104 @@
 import "dotenv";
-import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { db } from "@/db";
 import { sessions, users } from "@/db/schema";
-import { Lucia, Session, User } from "lucia";
-import { cookies } from "next/headers";
+import type { Session, User } from "@/db/schema";
 import { Google, Slack } from "arctic";
+import {
+    encodeBase32LowerCaseNoPadding,
+    encodeHexLowerCase,
+} from "@oslojs/encoding";
+import { sha256 } from "@oslojs/crypto/sha2";
+import { eq } from "drizzle-orm";
+import { getSessionToken } from "./session";
 
-const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
+const SESSION_EXPIRY_TIME = 1000 * 60 * 60 * 24 * 30; // 30 days
 
-export const lucia = new Lucia(adapter, {
-    sessionCookie: {
-        expires: false,
-        attributes: {
-            secure: process.env.NODE_ENV === "production",
-        },
-    },
-    getUserAttributes: (attributes) => {
-        return {
-            role: attributes.role,
-        };
-    },
-});
+export type SessionValidationResult =
+    | { session: Session; user: User }
+    | { session: null; user: null };
+
+export const generateSessionToken = (): string => {
+    const bytes = new Uint8Array(20);
+    crypto.getRandomValues(bytes);
+    const token = encodeBase32LowerCaseNoPadding(bytes);
+    return token;
+};
+
+export const createSession = async (
+    token: string,
+    userId: string
+): Promise<Session> => {
+    const sessionId = encodeHexLowerCase(
+        sha256(new TextEncoder().encode(token))
+    );
+    const session: Session = {
+        id: sessionId,
+        userId,
+        expiresAt: new Date(Date.now() + SESSION_EXPIRY_TIME),
+    };
+    await db.insert(sessions).values(session);
+    return session;
+};
+
+export const invalidateSession = async (sessionId: string): Promise<void> => {
+    await db.delete(sessions).where(eq(sessions.id, sessionId));
+};
+
+export const validateSessionToken = async (
+    token: string
+): Promise<SessionValidationResult> => {
+    const sessionId = encodeHexLowerCase(
+        sha256(new TextEncoder().encode(token))
+    );
+    const sessionInDb = await db.query.sessions.findFirst({
+        where: eq(sessions.id, sessionId),
+    });
+
+    if (!sessionInDb) {
+        return { session: null, user: null };
+    }
+
+    // Invalidate session if it is expired
+    if (Date.now() >= sessionInDb.expiresAt.getTime()) {
+        await invalidateSession(sessionId);
+        return { session: null, user: null };
+    }
+
+    const user = await db.query.users.findFirst({
+        where: eq(users.id, sessionInDb.userId),
+    });
+
+    if (!user) {
+        await invalidateSession(sessionId);
+        return { session: null, user: null };
+    }
+
+    // Refresh session if nearing expiration
+    if (
+        Date.now() >=
+        sessionInDb.expiresAt.getTime() - SESSION_EXPIRY_TIME / 2
+    ) {
+        sessionInDb.expiresAt = new Date(Date.now() + SESSION_EXPIRY_TIME);
+        await db
+            .update(sessions)
+            .set({ expiresAt: sessionInDb.expiresAt })
+            .where(eq(sessions.id, sessionId));
+    }
+    return { session: sessionInDb, user };
+};
 
 export const validateRequest = async (): Promise<
     { user: User; session: Session } | { user: null; session: null }
 > => {
-    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
-    if (!sessionId) {
+    const sessionToken = getSessionToken();
+    if (!sessionToken) {
         return {
             user: null,
             session: null,
         };
     }
-
-    const result = await lucia.validateSession(sessionId);
-
-    try {
-        if (result.session && result.session.fresh) {
-            const sessionCookie = lucia.createSessionCookie(result.session.id);
-            cookies().set(
-                sessionCookie.name,
-                sessionCookie.value,
-                sessionCookie.attributes
-            );
-        }
-        if (!result.session) {
-            const sessionCookie = lucia.createBlankSessionCookie();
-            cookies().set(
-                sessionCookie.name,
-                sessionCookie.value,
-                sessionCookie.attributes
-            );
-        }
-    } catch {
-        // NextJS throws an error when` attempting to set cookies during rendering
-    }
-    return result;
+    return validateSessionToken(sessionToken);
 };
-
-declare module "lucia" {
-    interface Register {
-        Lucia: typeof lucia;
-        DatabaseUserAttributes: DatabaseUserAttributes;
-    }
-}
-
-interface DatabaseUserAttributes {
-    role: "user" | "production_head" | "admin";
-}
 
 export const googleAuth = new Google(
     process.env.GOOGLE_CLIENT_ID!,

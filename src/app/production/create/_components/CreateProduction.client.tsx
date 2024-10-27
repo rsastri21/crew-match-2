@@ -1,9 +1,8 @@
 "use client";
 
 import { useToast } from "@/components/ui/use-toast";
-import { Production } from "@/db/schema";
+import { Production, User } from "@/db/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "lucia";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useServerAction } from "zsa-react";

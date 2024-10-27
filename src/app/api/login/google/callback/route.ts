@@ -1,11 +1,11 @@
 import { getUserById } from "@/data/users";
+import { User } from "@/db/schema";
 import { googleAuth } from "@/lib/auth";
 import { setSession } from "@/lib/session";
 import { getAccountByGoogleIdUseCase } from "@/utils/accounts";
 import { getDashboardUrl } from "@/utils/redirects";
 import { createGoogleUser } from "@/utils/users";
 import { OAuth2RequestError } from "arctic";
-import { User } from "lucia";
 import { cookies } from "next/headers";
 
 export async function GET(request: Request): Promise<Response> {
@@ -50,7 +50,7 @@ export async function GET(request: Request): Promise<Response> {
         if (existingAccount) {
             // By foreign key constraint, user must exist if account exists
             const existingUser = await getUserById(existingAccount.userId);
-            await setSession(existingUser!.id, existingUser!.role);
+            await setSession(existingUser!.id);
             return new Response(null, {
                 status: 302,
                 headers: {
@@ -76,7 +76,7 @@ export async function GET(request: Request): Promise<Response> {
         // Role parameter will only be used if the user does not exist, so we can pass
         // "user" as default as role will be null for existing users.
         const user: User = await createGoogleUser(googleUser, role ?? "user");
-        await setSession(user.id, user.role);
+        await setSession(user.id);
         return new Response(null, {
             status: 302,
             headers: {

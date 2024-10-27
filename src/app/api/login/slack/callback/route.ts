@@ -1,11 +1,11 @@
 import { getUserById } from "@/data/users";
+import { User } from "@/db/schema";
 import { slackAuth } from "@/lib/auth";
 import { setSession } from "@/lib/session";
 import { getAccountBySlackIdUseCase } from "@/utils/accounts";
 import { getDashboardUrl } from "@/utils/redirects";
 import { createSlackUser } from "@/utils/users";
 import { OAuth2RequestError } from "arctic";
-import { User } from "lucia";
 import { cookies } from "next/headers";
 
 export async function GET(request: Request): Promise<Response> {
@@ -37,7 +37,7 @@ export async function GET(request: Request): Promise<Response> {
 
         if (existingAccount) {
             const existingUser = await getUserById(existingAccount.userId);
-            await setSession(existingUser!.id, existingUser!.role);
+            await setSession(existingUser!.id);
             return new Response(null, {
                 status: 302,
                 headers: {
@@ -59,7 +59,7 @@ export async function GET(request: Request): Promise<Response> {
         cookies().delete("user_role");
 
         const user: User = await createSlackUser(slackUser, role ?? "user");
-        await setSession(user.id, user.role);
+        await setSession(user.id);
         return new Response(null, {
             status: 302,
             headers: {

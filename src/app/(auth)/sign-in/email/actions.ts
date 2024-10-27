@@ -17,6 +17,6 @@ export const signInAction = unauthenticatedAction
     )
     .handler(async ({ input }) => {
         const user = await signInUser(input.email, input.password);
-        await setSession(user.id, user.role);
+        await setSession(user.id);
         redirect(getDashboardUrl(user.role));
     });

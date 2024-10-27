@@ -17,8 +17,8 @@ export async function GET(request: Request): Promise<Response> {
             });
         }
 
-        const { id, role } = await verifyEmail(token);
-        await setSession(id, role);
+        const { id } = await verifyEmail(token);
+        await setSession(id);
 
         return new Response(null, {
             status: 302,

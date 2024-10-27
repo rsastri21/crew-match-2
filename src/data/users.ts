@@ -1,12 +1,16 @@
 import { db } from "@/db";
-import { User, accounts, users } from "@/db/schema";
+import { User, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { generateIdFromEntropySize } from "lucia";
 import { getAccountByUserId } from "./accounts";
 import { hashPassword } from "./utils";
+import { encodeBase32LowerCaseNoPadding } from "@oslojs/encoding";
 
-const MAGIC_LINK_TOKEN_TTL = 1000 * 60 * 5; // 5 min
 const ENTROPY_SIZE = 10;
+
+const generateIdFromEntropySize = (size: number): string => {
+    const buffer = crypto.getRandomValues(new Uint8Array(size));
+    return encodeBase32LowerCaseNoPadding(buffer);
+};
 
 export async function deleteUser(userId: string, trx = db) {
     await trx.delete(users).where(eq(users.id, userId));

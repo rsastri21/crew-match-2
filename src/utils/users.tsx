@@ -95,7 +95,7 @@ export async function createGoogleUser(googleUser: GoogleUser, role: string) {
     await createAccountViaGoogle(existingUser.id, googleUser.sub);
     await createProfile(existingUser.id, googleUser.name, googleUser.picture);
 
-    return { id: existingUser.id, role: existingUser.role };
+    return existingUser;
 }
 
 export async function createSlackUser(slackUser: SlackUser, role: string) {
@@ -113,7 +113,7 @@ export async function createSlackUser(slackUser: SlackUser, role: string) {
     await createAccountViaSlack(existingUser.id, slackUser.sub);
     await createProfile(existingUser.id, slackUser.name, slackUser.picture);
 
-    return { id: existingUser.id, role: existingUser.role };
+    return existingUser;
 }
 
 export async function getUserProfile(userId: string) {
