@@ -16,7 +16,7 @@ export const accountTypeEnum = pgEnum("account_type", [
     "email",
 ]);
 
-export const roleEnum = pgEnum("role", ["user", "production_head", "admin"]);
+export const roleEnum = pgEnum("role", ["user", "production_head"]);
 
 export const users = pgTable("user", {
     id: text("id").primaryKey(),
@@ -25,6 +25,7 @@ export const users = pgTable("user", {
         withTimezone: true,
         mode: "date",
     }),
+    isAdmin: boolean("is_admin").default(false),
     role: roleEnum("role").notNull().default("user"),
 });
 
