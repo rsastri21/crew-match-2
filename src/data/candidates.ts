@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { Candidate, candidates } from "@/db/schema";
-import { eq, ilike } from "drizzle-orm";
+import { count, eq, ilike } from "drizzle-orm";
 
 export async function createCandidate(
     name: string,
@@ -74,6 +74,10 @@ export async function getCandidatesBySimilarName(name: string) {
         ),
     });
     return matchingCandidates;
+}
+
+export async function getCandidateCount() {
+    return db.select({ count: count() }).from(candidates);
 }
 
 export async function deleteCandidate(candidateId: number) {

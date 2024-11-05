@@ -156,16 +156,18 @@ export default function ProfileEditForm({
                             </FormItem>
                         )}
                     />
-                    <SheetClose asChild>
-                        <Button variant="secondary">Cancel</Button>
-                    </SheetClose>
-                    <LoaderButton
-                        isLoading={isPending}
-                        className="w-fit"
-                        type="submit"
-                    >
-                        Save changes
-                    </LoaderButton>
+                    <div className="w-full flex justify-end items-center gap-2">
+                        <SheetClose asChild>
+                            <Button variant="secondary">Cancel</Button>
+                        </SheetClose>
+                        <LoaderButton
+                            isLoading={isPending}
+                            className="w-fit"
+                            type="submit"
+                        >
+                            Save changes
+                        </LoaderButton>
+                    </div>
                 </form>
             </Form>
         </div>

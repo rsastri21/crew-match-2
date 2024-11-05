@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { Production, productions } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 
 export async function createProduction(
     name: string,
@@ -82,6 +82,10 @@ export async function getProductionWithRoles(productionId: number) {
     });
 
     return production;
+}
+
+export async function getProductionCount() {
+    return db.select({ count: count() }).from(productions);
 }
 
 export async function deleteProduction(productionId: number) {

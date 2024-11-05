@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { User, users } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { getAccountByUserId } from "./accounts";
 import { hashPassword } from "./utils";
 import { encodeBase32LowerCaseNoPadding } from "@oslojs/encoding";
@@ -68,6 +68,10 @@ export async function getCompleteUserInfo(userId: string) {
     });
 
     return user;
+}
+
+export async function getUserCount() {
+    return db.select({ count: count() }).from(users);
 }
 
 export async function setEmailVerified(userId: string, trx = db) {
