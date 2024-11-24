@@ -11,7 +11,7 @@ export default function PageContainer({
     return (
         <div className="container py-2 flex flex-col gap-2 h-full items-center mx-auto">
             {heading}
-            <Separator />
+            <Separator className="my-2" />
             {children}
         </div>
     );

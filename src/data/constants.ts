@@ -20,6 +20,84 @@ export const ROLES = [
     "Soundtrack",
 ];
 
+export enum CANDIDATE_PROPERTY_KEYS {
+    name = "name",
+    yearsInUW = "yearsInUW",
+    quartersInLUX = "quartersInLUX",
+    isActing = "isActing",
+    prioritizeProductions = "prioritizeProductions",
+    interestedProductions = "interestedProductions",
+    interestedRoles = "interestedRoles",
+    auditionProductions = "auditionProductions",
+}
+
+type AllCandidateProperties =
+    | keyof typeof CANDIDATE_PROPERTY_KEYS
+    | "interestedProductions-1"
+    | "interestedProductions-2"
+    | "interestedProductions-3"
+    | "interestedRoles-1"
+    | "interestedRoles-2"
+    | "interestedRoles-3";
+export type CandidatePropertyKeys = Exclude<
+    AllCandidateProperties,
+    "interestedProductions" | "interestedRoles"
+>;
+
+export const CANDIDATE_PROPERTIES: Record<
+    CandidatePropertyKeys,
+    { label: string; header: string }
+> = {
+    [CANDIDATE_PROPERTY_KEYS.name]: {
+        label: "Name",
+        header: "",
+    },
+    [CANDIDATE_PROPERTY_KEYS.yearsInUW]: {
+        label: "Years at UW",
+        header: "",
+    },
+    [CANDIDATE_PROPERTY_KEYS.quartersInLUX]: {
+        label: "Quarters in LUX",
+        header: "",
+    },
+    [CANDIDATE_PROPERTY_KEYS.isActing]: {
+        label: "Acting Preference",
+        header: "",
+    },
+    [CANDIDATE_PROPERTY_KEYS.prioritizeProductions]: {
+        label: "Priotize Productions",
+        header: "",
+    },
+    [`${CANDIDATE_PROPERTY_KEYS.interestedProductions}-1`]: {
+        label: "Production Rank 1",
+        header: "",
+    },
+    [`${CANDIDATE_PROPERTY_KEYS.interestedProductions}-2`]: {
+        label: "Production Rank 2",
+        header: "",
+    },
+    [`${CANDIDATE_PROPERTY_KEYS.interestedProductions}-3`]: {
+        label: "Production Rank 3",
+        header: "",
+    },
+    [`${CANDIDATE_PROPERTY_KEYS.interestedRoles}-1`]: {
+        label: "Role Rank 1",
+        header: "",
+    },
+    [`${CANDIDATE_PROPERTY_KEYS.interestedRoles}-2`]: {
+        label: "Role Rank 2",
+        header: "",
+    },
+    [`${CANDIDATE_PROPERTY_KEYS.interestedRoles}-3`]: {
+        label: "Role Rank 3",
+        header: "",
+    },
+    [CANDIDATE_PROPERTY_KEYS.auditionProductions]: {
+        label: "Productions to Audition For",
+        header: "",
+    },
+};
+
 export const VARIANTS = {
     small: {
         heading: "text-base",
