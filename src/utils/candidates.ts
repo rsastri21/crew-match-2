@@ -3,6 +3,7 @@ import {
     getCandidateByName,
     getCandidatesBySimilarName,
     updateCandidate,
+    batchCreateCandidates,
 } from "@/data/candidates";
 import { Candidate } from "@/db/schema";
 import { cache } from "react";
@@ -43,6 +44,13 @@ export async function registerCandidate(
             updatedAt: new Date(),
         });
     }
+}
+
+export async function batchInsertCandidates(
+    candidates: Omit<Candidate, "id" | "createdAt" | "updatedAt" | "userId">[]
+) {
+    const insertedCandidates = await batchCreateCandidates(candidates);
+    return insertedCandidates.length;
 }
 
 export const getCandidatesWithSimilarName = cache(async (name: string) => {

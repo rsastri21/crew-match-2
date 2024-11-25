@@ -1,6 +1,8 @@
 "use server";
 
 import { authenticatedAction } from "@/lib/safe-action";
+import { batchInsertCandidates } from "@/utils/candidates";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const candidateSchema = z.object({
@@ -17,5 +19,7 @@ export const uploadCandidateAction = authenticatedAction
     .createServerAction()
     .input(z.array(candidateSchema))
     .handler(async ({ input }) => {
-        console.log(input);
+        const numCandidatesInserted = await batchInsertCandidates(input);
+        revalidatePath("/admin");
+        return numCandidatesInserted;
     });

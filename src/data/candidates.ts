@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { Candidate, candidates } from "@/db/schema";
-import { count, eq, ilike } from "drizzle-orm";
+import { count, eq, ilike, sql } from "drizzle-orm";
 
 export async function createCandidate(
     name: string,
@@ -26,6 +26,31 @@ export async function createCandidate(
         })
         .returning();
     return candidate;
+}
+
+export async function batchCreateCandidates(
+    candidatesToInsert: Omit<
+        Candidate,
+        "id" | "createdAt" | "updatedAt" | "userId"
+    >[]
+) {
+    const insertedCandidates = await db
+        .insert(candidates)
+        .values(candidatesToInsert)
+        .onConflictDoUpdate({
+            target: candidates.name,
+            set: {
+                isActing: sql`excluded.is_acting`,
+                prioritizeProductions: sql`excluded.prioritize_productions`,
+                yearsInUW: sql`excluded.years_in_uw`,
+                quartersInLUX: sql`excluded.quarters_in_lux`,
+                interestedProductions: sql`excluded.interested_productions`,
+                interestedRoles: sql`excluded.interested_roles`,
+                updatedAt: new Date(),
+            },
+        })
+        .returning();
+    return insertedCandidates;
 }
 
 export async function updateCandidate(

@@ -84,14 +84,15 @@ export default function FileUploadDialog({
         onError({ err }) {
             toast({
                 title: "Something went wrong",
-                description: err.message,
+                description:
+                    "File format is invalid or headers are misconfigured",
                 variant: "destructive",
             });
         },
-        onSuccess() {
+        onSuccess({ data: numCandidates }) {
             toast({
-                title: "Successfully uploaded candidates!",
-                description: "TODO: Put numbers here",
+                title: "Successfully uploaded CSV!",
+                description: `Created ${numCandidates} candidates`,
             });
 
             onUploadComplete();
