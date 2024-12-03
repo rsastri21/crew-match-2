@@ -51,7 +51,7 @@ export default async function ViewProductionPage({
     ];
 
     return (
-        <div className="container py-2 flex flex-col gap-2 min-h-[80dvh] items-center mx-auto">
+        <div className="container py-2 flex flex-col gap-2 h-fit items-center mx-auto">
             <section className="w-full py-6 flex flex-col md:flex-row gap-4 justify-center md:justify-between items-center">
                 <div className="w-fit flex items-center justify-center space-x-2">
                     <TopHeading text={production.name} />
@@ -73,7 +73,7 @@ export default async function ViewProductionPage({
                 </div>
             </section>
             <Separator />
-            <div className="w-full h-[60dvh] mt-8 overflow-y-scroll grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="w-full h-fit my-8 overflow-y-scroll grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div className="w-full col-span-1 flex flex-col gap-4">
                     {productionSubInfoMap.map((productionSubInfo) => (
                         <ProductionSubInfoCard
