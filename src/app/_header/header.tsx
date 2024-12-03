@@ -12,7 +12,7 @@ const profileLoader = cache(getUserProfile);
 
 export async function Header() {
     return (
-        <nav className="border-b py-4">
+        <nav className="border-b py-4 h-[72px]">
             <div className="container mx-auto flex justify-between items-center">
                 <div className="flex gap-8 items-center">
                     <Button variant="ghost">

@@ -32,7 +32,9 @@ export default function RootLayout({
             >
                 <Providers>
                     <Header />
-                    {children}
+                    <div className="max-h-[calc(100vh-72px)] overflow-y-scroll">
+                        {children}
+                    </div>
                 </Providers>
                 <Toaster />
             </body>

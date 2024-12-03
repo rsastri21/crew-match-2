@@ -2,6 +2,15 @@ import { db } from "@/db";
 import { Candidate, candidates } from "@/db/schema";
 import { count, eq, ilike, sql } from "drizzle-orm";
 
+export type CandidateRow = {
+    name: string;
+    yearsInUW: number;
+    quartersInLUX: number;
+    status: "acting" | "assigned" | "available";
+    interestedProductions: string[];
+    interestedRoles: string[];
+};
+
 export async function createCandidate(
     name: string,
     userId: string | null,
@@ -63,6 +72,11 @@ export async function updateCandidate(
         .where(eq(candidates.id, candidateId))
         .returning();
     return candidate;
+}
+
+export async function getAllCandidates() {
+    const candidates = await db.query.candidates.findMany();
+    return candidates;
 }
 
 export async function getCandidateAssignments(userId: string) {
