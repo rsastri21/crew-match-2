@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/lib/session";
 import { Loader2Icon } from "lucide-react";
 import { User } from "@/db/schema";
 import ProfileDropdownClient from "./ProfileDropdown.client";
+import { AdminButton } from "./admin-button";
 
 const profileLoader = cache(getUserProfile);
 
@@ -52,10 +53,13 @@ async function HeaderActions() {
     return (
         <>
             {isSignedIn ? (
-                <>
-                    <ModeToggle />
+                <div className="flex items-center justify-start gap-4">
+                    <div className="flex items-center justify-between gap-1">
+                        <AdminButton />
+                        <ModeToggle />
+                    </div>
                     <ProfileDropdown user={user} />
-                </>
+                </div>
             ) : (
                 <>
                     <ModeToggle />
