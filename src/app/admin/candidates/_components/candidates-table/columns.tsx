@@ -25,6 +25,36 @@ export const columns: ColumnDef<CandidateRow>[] = [
         ),
     },
     {
+        accessorKey: "interestedRoles",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Top Role" />
+        ),
+        cell: ({ row }) => {
+            const interestedRoles = row.original.interestedRoles;
+            return (
+                <div className="flex items-center justify-start">
+                    {interestedRoles[0]?.length ? (
+                        <Badge>{interestedRoles[0]}</Badge>
+                    ) : null}
+                </div>
+            );
+        },
+    },
+    {
+        accessorKey: "interestedProductions",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Top Production" />
+        ),
+        cell: ({ row }) => {
+            const interestedProductions = row.original.interestedProductions;
+            return (
+                <div className="flex flex-col items-start justify-start gap-2">
+                    <Badge>{interestedProductions[0]}</Badge>
+                </div>
+            );
+        },
+    },
+    {
         accessorKey: "status",
         header: ({ column }) => (
             <DataTableColumnHeader
