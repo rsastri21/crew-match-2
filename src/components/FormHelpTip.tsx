@@ -15,7 +15,7 @@ export default function FormHelpTip({ children }: FormHelpTipProps) {
     return (
         <TooltipProvider>
             <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger type="button">
                     <Info className="w-4 h-4 text-muted-foreground" />
                 </TooltipTrigger>
                 <TooltipContent>{children}</TooltipContent>

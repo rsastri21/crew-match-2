@@ -1,12 +1,12 @@
 "use client";
 
 import { useToast } from "@/components/ui/use-toast";
-import { Production, User } from "@/db/schema";
+import { ProductionWithRoles, User } from "@/db/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useServerAction } from "zsa-react";
-import { createProductionAction } from "../actions";
+import { createProductionAction } from "../create/actions";
 import {
     Form,
     FormControl,
@@ -22,10 +22,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { LoaderButton } from "@/components/loader-button";
 import { getDashboardUrl } from "@/utils/redirects";
+import { Badge } from "@/components/ui/badge";
+import { CircleMinus } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import AddRoleComponent from "./AddRole";
+import { useModifyProduction } from "@/hooks/use-modify-production";
+import RolesListComponent from "./RolesList";
 
 const productionSchema = z.object({
     name: z.string().min(1, { message: "A production name is required." }),
@@ -47,9 +53,18 @@ export default function CreateProduction({
     production,
 }: {
     user: User;
-    production?: Production;
+    production?: ProductionWithRoles;
 }) {
     const { toast } = useToast();
+    const isEdit = production ? true : false;
+
+    const {
+        roles,
+        handleAddRole,
+        handleRemoveRole,
+        getSubmissionExpectations,
+        reset,
+    } = useModifyProduction(production);
 
     const { execute, isPending } = useServerAction(createProductionAction, {
         onError({ err }) {
@@ -119,6 +134,7 @@ export default function CreateProduction({
                                             {...field}
                                             className="w-full"
                                             placeholder="Enter a name for the production"
+                                            disabled={isEdit}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -240,9 +256,35 @@ export default function CreateProduction({
                             )}
                         />
                     </FormCard>
+                    {isEdit && (
+                        <FormCard
+                            title="Roles"
+                            description="Edit the roles on your production. Deleting a role populated with a member will remove them from your production and return them to the assignment pool."
+                        >
+                            <RolesListComponent
+                                roles={roles}
+                                removeRole={handleRemoveRole}
+                            />
+                            <Separator />
+                            <AddRoleComponent
+                                handleRoleCreate={handleAddRole}
+                            />
+                            <Button
+                                onClick={reset}
+                                variant="secondary"
+                                type="button"
+                            >
+                                Reset Changes
+                            </Button>
+                        </FormCard>
+                    )}
                     <Card className="w-full md:w-3/4 mx-auto px-6 py-4 flex justify-center md:justify-end items-center gap-2">
                         <Link
-                            href={getDashboardUrl(user.role)}
+                            href={
+                                isEdit
+                                    ? `/production/${production!.id}/view`
+                                    : getDashboardUrl(user.role)
+                            }
                             className={cn(
                                 buttonVariants({
                                     variant: "secondary",

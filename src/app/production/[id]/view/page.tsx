@@ -35,6 +35,8 @@ export default async function ViewProductionPage({
         );
     }
 
+    const isProductionLeader = production.userId === user.id;
+
     const productionSubInfoMap = [
         {
             title: "Logline",
@@ -69,7 +71,19 @@ export default async function ViewProductionPage({
                     >
                         View pitch
                     </Link>
-                    <Button>I&apos;m interested</Button>
+                    {!isProductionLeader ? (
+                        <Button>I&apos;m interested</Button>
+                    ) : (
+                        <Link
+                            href={`/production/${production.id}/edit`}
+                            className={cn(
+                                buttonVariants({ variant: "default" }),
+                                "w-fit"
+                            )}
+                        >
+                            Edit
+                        </Link>
+                    )}
                 </div>
             </section>
             <Separator />
