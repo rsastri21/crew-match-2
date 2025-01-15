@@ -1,3 +1,4 @@
+import type { CandidateRow } from "@/data/candidates";
 import {
     createCandidate,
     getCandidateByName,
@@ -44,6 +45,25 @@ export async function registerCandidate(
             updatedAt: new Date(),
         });
     }
+}
+
+export function transformCandidatesToRowModel(
+    candidates: Candidate[]
+): CandidateRow[] {
+    const transformedCandidates: CandidateRow[] = [];
+
+    for (const candidate of candidates) {
+        transformedCandidates.push({
+            name: candidate.name,
+            yearsInUW: candidate.yearsInUW,
+            quartersInLUX: candidate.quartersInLUX,
+            status: candidate.isActing ? "acting" : "available",
+            interestedProductions: candidate.interestedProductions ?? [],
+            interestedRoles: candidate.interestedRoles ?? [],
+        });
+    }
+
+    return transformedCandidates;
 }
 
 export async function batchInsertCandidates(

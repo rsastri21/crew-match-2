@@ -26,13 +26,15 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
             <body
                 className={cn(
-                    "min-h-screen flex flex-col bg-background font-sans antialiased",
+                    "flex flex-col bg-background font-sans antialiased overflow-hidden",
                     fontSans.variable
                 )}
             >
                 <Providers>
                     <Header />
-                    {children}
+                    <div className="max-h-[calc(100vh-72px)] overflow-y-scroll">
+                        {children}
+                    </div>
                 </Providers>
                 <Toaster />
             </body>

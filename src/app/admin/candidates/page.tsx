@@ -1,10 +1,13 @@
-import FormCard from "@/components/FormCard";
 import PageContainer from "@/components/PageContainer";
 import TopHeading from "@/components/TopHeading";
 import { getCurrentUser } from "@/lib/session";
 import { getDashboardUrl } from "@/utils/redirects";
 import { redirect } from "next/navigation";
 import CandidateUploadCard from "./_components/CandidateUploadCard";
+import { getAllCandidates } from "@/data/candidates";
+import { DataTable } from "@/components/ui/data-table";
+import { columns } from "./_components/candidates-table/columns";
+import { transformCandidatesToRowModel } from "@/utils/candidates";
 
 export default async function AdminCandidatePage() {
     const user = await getCurrentUser();
@@ -17,8 +20,12 @@ export default async function AdminCandidatePage() {
         redirect(getDashboardUrl(user.role));
     }
 
+    const candidates = await getAllCandidates();
+    const rowCandidates = transformCandidatesToRowModel(candidates);
+
     return (
         <PageContainer heading={<PageHeading />}>
+            <DataTable columns={columns} data={rowCandidates} />
             <CandidateUploadCard />
         </PageContainer>
     );

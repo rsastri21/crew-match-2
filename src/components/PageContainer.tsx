@@ -9,7 +9,7 @@ export default function PageContainer({
     children: ReactNode;
 }) {
     return (
-        <div className="container py-2 flex flex-col gap-2 h-full items-center mx-auto">
+        <div className="container py-2 flex flex-col gap-4 h-full items-center mx-auto">
             {heading}
             <Separator className="my-2" />
             {children}
