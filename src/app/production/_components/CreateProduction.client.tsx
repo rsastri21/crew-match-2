@@ -6,7 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useServerAction } from "zsa-react";
-import { createProductionAction } from "../create/actions";
+import {
+    createProductionAction,
+    editProductionAction,
+} from "../create/actions";
 import {
     Form,
     FormControl,
@@ -58,6 +61,13 @@ export default function CreateProduction({
     const { toast } = useToast();
     const isEdit = production ? true : false;
 
+    /**
+     * TODO:
+     * Logic to use different server action for edit vs. create flow
+     * Better UX on adding removing roles? Toast?
+     * DB integration
+     */
+
     const {
         roles,
         handleAddRole,
@@ -66,21 +76,41 @@ export default function CreateProduction({
         reset,
     } = useModifyProduction(production);
 
-    const { execute, isPending } = useServerAction(createProductionAction, {
-        onError({ err }) {
-            toast({
-                title: "Failed to create production",
-                description: err.message,
-                variant: "destructive",
-            });
-        },
-        onSuccess() {
-            toast({
-                title: "Successfully created production!",
-                description: "Redirecting to the production's page",
-            });
-        },
-    });
+    const { execute: executeCreate, isPending: isCreatePending } =
+        useServerAction(createProductionAction, {
+            onError({ err }) {
+                toast({
+                    title: "Failed to create production",
+                    description: err.message,
+                    variant: "destructive",
+                });
+            },
+            onSuccess() {
+                toast({
+                    title: "Successfully created production!",
+                    description: "Redirecting to the production's page",
+                });
+            },
+        });
+
+    const { execute: executeEdit, isPending: isEditPending } = useServerAction(
+        editProductionAction,
+        {
+            onError({ err }) {
+                toast({
+                    title: "Failed to edit production",
+                    description: err.message,
+                    variant: "destructive",
+                });
+            },
+            onSuccess() {
+                toast({
+                    title: "Successfully saved production!",
+                    description: "Redirecting to the production's page",
+                });
+            },
+        }
+    );
 
     const form = useForm<z.infer<typeof productionSchema>>({
         resolver: zodResolver(productionSchema),
@@ -96,7 +126,17 @@ export default function CreateProduction({
     });
 
     function onSubmit(values: z.infer<typeof productionSchema>) {
-        execute(values);
+        if (isEdit) {
+            const submissionExpectations = getSubmissionExpectations();
+            executeEdit({
+                ...values,
+                rolesToCreate: submissionExpectations.create,
+                rolesToDelete: submissionExpectations.delete,
+                productionId: production!.id,
+            });
+        } else {
+            executeCreate(values);
+        }
     }
 
     return (
@@ -295,7 +335,7 @@ export default function CreateProduction({
                             Discard Changes
                         </Link>
                         <LoaderButton
-                            isLoading={isPending}
+                            isLoading={isEditPending || isCreatePending}
                             className="w-fit"
                             type="submit"
                         >

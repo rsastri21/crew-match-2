@@ -2,13 +2,15 @@ import { ROLES } from "@/data/constants";
 import {
     createProduction,
     getAllProductionsWithRoles,
+    updateProduction,
 } from "@/data/productions";
 import {
     createRoles,
+    deleteRole,
     getProductionDirectorName,
     PendingCreateRole,
 } from "@/data/roles";
-import { ProductionWithRoles } from "@/db/schema";
+import { Production, ProductionWithRoles } from "@/db/schema";
 import { cache } from "react";
 
 export async function getDirectorsForProductions(
@@ -56,4 +58,33 @@ export async function createProductionWithDefaultRoles(
     await createRoles(defaultRoles);
 
     return production;
+}
+
+export async function editProduction(
+    productionId: number,
+    updatedProduction: Partial<Production>,
+    rolesToCreate: string[],
+    rolesToDelete: number[]
+) {
+    const editedProduction = await updateProduction(
+        productionId,
+        updatedProduction
+    );
+
+    const roles: PendingCreateRole[] = rolesToCreate.map((role: string) => {
+        return {
+            role,
+            production: editedProduction.name,
+            productionId,
+        };
+    });
+
+    if (roles.length) {
+        await createRoles(roles);
+    }
+    await Promise.all(
+        rolesToDelete.map((roleToDelete: number) => deleteRole(roleToDelete))
+    );
+
+    return editedProduction;
 }
