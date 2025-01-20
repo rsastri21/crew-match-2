@@ -3,6 +3,7 @@ import { Candidate, candidates } from "@/db/schema";
 import { count, eq, ilike, sql } from "drizzle-orm";
 
 export type CandidateRow = {
+    id: number;
     name: string;
     yearsInUW: number;
     quartersInLUX: number;

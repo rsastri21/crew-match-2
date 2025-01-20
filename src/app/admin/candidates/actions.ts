@@ -1,5 +1,6 @@
 "use server";
 
+import { deleteCandidate } from "@/data/candidates";
 import { authenticatedAction } from "@/lib/safe-action";
 import { batchInsertCandidates } from "@/utils/candidates";
 import { revalidatePath } from "next/cache";
@@ -15,6 +16,10 @@ const candidateSchema = z.object({
     interestedRoles: z.string().array(),
 });
 
+const deleteCandidateSchema = z.object({
+    id: z.number().nonnegative(),
+});
+
 export const uploadCandidateAction = authenticatedAction
     .createServerAction()
     .input(z.array(candidateSchema))
@@ -22,4 +27,12 @@ export const uploadCandidateAction = authenticatedAction
         const numCandidatesInserted = await batchInsertCandidates(input);
         revalidatePath("/admin");
         return numCandidatesInserted;
+    });
+
+export const deleteCandidateAction = authenticatedAction
+    .createServerAction()
+    .input(deleteCandidateSchema)
+    .handler(async ({ input }) => {
+        await deleteCandidate(input.id);
+        revalidatePath("/admin/candidates");
     });

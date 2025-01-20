@@ -14,14 +14,16 @@ interface DataTableColumnHeaderProps<TData, TValue>
     extends React.HTMLAttributes<HTMLDivElement> {
     column: Column<TData, TValue>;
     title: string;
+    shouldNotSort?: boolean;
 }
 
 export function DataTableColumnHeader<TData, TValue>({
     column,
     title,
     className,
+    shouldNotSort,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-    if (!column.getCanSort()) {
+    if (!column.getCanSort() || shouldNotSort) {
         return <div className={cn(className)}>{title}</div>;
     }
 

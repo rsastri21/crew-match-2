@@ -54,6 +54,7 @@ export function transformCandidatesToRowModel(
 
     for (const candidate of candidates) {
         transformedCandidates.push({
+            id: candidate.id,
             name: candidate.name,
             yearsInUW: candidate.yearsInUW,
             quartersInLUX: candidate.quartersInLUX,
