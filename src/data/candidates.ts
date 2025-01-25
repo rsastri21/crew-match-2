@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { Candidate, candidates } from "@/db/schema";
+import { Candidate, candidates, Role } from "@/db/schema";
 import { count, eq, ilike, sql } from "drizzle-orm";
 
 export type CandidateRow = {
@@ -10,6 +10,7 @@ export type CandidateRow = {
     status: "acting" | "assigned" | "available";
     interestedProductions: string[];
     interestedRoles: string[];
+    roles: Role[];
 };
 
 export async function createCandidate(

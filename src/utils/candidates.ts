@@ -66,6 +66,7 @@ export function transformCandidatesToRowModel(
             status,
             interestedProductions: candidate.interestedProductions ?? [],
             interestedRoles: candidate.interestedRoles ?? [],
+            roles: candidate.roles,
         });
     }
 

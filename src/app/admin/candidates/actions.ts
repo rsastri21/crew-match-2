@@ -26,6 +26,8 @@ const assignCandidateSchema = z.object({
     roleId: z.number().nonnegative(),
 });
 
+const removeCandidateSchema = z.object({ roleId: z.number().nonnegative() });
+
 export const uploadCandidateAction = authenticatedAction
     .createServerAction()
     .input(z.array(candidateSchema))
@@ -48,5 +50,13 @@ export const assignCandidateAction = authenticatedAction
     .input(assignCandidateSchema)
     .handler(async ({ input }) => {
         await updateRole(input.roleId, { candidateId: input.id });
+        revalidatePath("/admin/candidates");
+    });
+
+export const removeCandidateAction = authenticatedAction
+    .createServerAction()
+    .input(removeCandidateSchema)
+    .handler(async ({ input }) => {
+        await updateRole(input.roleId, { candidateId: null });
         revalidatePath("/admin/candidates");
     });

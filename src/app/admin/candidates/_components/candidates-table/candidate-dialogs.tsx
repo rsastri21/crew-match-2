@@ -9,7 +9,11 @@ import {
 } from "@/components/ui/dialog";
 import { CandidateRow } from "@/data/candidates";
 import { useServerAction } from "zsa-react";
-import { assignCandidateAction, deleteCandidateAction } from "../../actions";
+import {
+    assignCandidateAction,
+    deleteCandidateAction,
+    removeCandidateAction,
+} from "../../actions";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { getProductionsWithAvailableRoles } from "@/utils/productionClientUtils";
@@ -30,6 +34,8 @@ export function handleDialogMenu(mode: string, row: CandidateRow) {
     switch (mode) {
         case "assign":
             return <AssignCandidateDialog row={row} />;
+        case "remove":
+            return <RemoveCandidateDialog row={row} />;
         case "delete":
             return <DeleteDialog row={row} />;
         default:
@@ -216,6 +222,90 @@ function AssignCandidateDialog({ row }: { row: CandidateRow }) {
                             disabled={typeof selectedRole === "undefined"}
                         >
                             Assign
+                        </Button>
+                    </DialogClose>
+                </div>
+            </DialogFooter>
+        </DialogContent>
+    );
+}
+
+function RemoveCandidateDialog({ row }: { row: CandidateRow }) {
+    const [selectedRole, setSelectedRole] = useState<number | undefined>();
+
+    const { toast } = useToast();
+    const { execute } = useServerAction(removeCandidateAction, {
+        onError({ err }) {
+            toast({
+                title: "Failed to remove candidate",
+                description: err.message,
+                variant: "destructive",
+            });
+        },
+        onSuccess() {
+            toast({
+                title: "Successfully removed candidate",
+            });
+        },
+    });
+
+    function handleRemoveClick() {
+        if (!selectedRole) {
+            return;
+        }
+        execute({
+            roleId: selectedRole,
+        });
+    }
+
+    return (
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Remove {row.name} from Role</DialogTitle>
+                <DialogDescription>
+                    Choose a role to remove {row.name} from.
+                </DialogDescription>
+            </DialogHeader>
+            {row.roles.length === 0 ? (
+                <h2 className="font-semibold text-muted-foreground">
+                    No assigned roles.
+                </h2>
+            ) : (
+                <Select
+                    onValueChange={(value: string) =>
+                        setSelectedRole(Number(value))
+                    }
+                >
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectLabel>Roles</SelectLabel>
+                            {row.roles.map((role) => (
+                                <SelectItem
+                                    key={role.id}
+                                    value={String(role.id)}
+                                >
+                                    {role.role} - {role.production}
+                                </SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            )}
+            <DialogFooter>
+                <div className="flex flex-wrap justify-center gap-2">
+                    <DialogClose asChild>
+                        <Button variant="secondary">Cancel</Button>
+                    </DialogClose>
+                    <DialogClose asChild>
+                        <Button
+                            variant="destructive"
+                            disabled={typeof selectedRole === "undefined"}
+                            onClick={handleRemoveClick}
+                        >
+                            Remove
                         </Button>
                     </DialogClose>
                 </div>

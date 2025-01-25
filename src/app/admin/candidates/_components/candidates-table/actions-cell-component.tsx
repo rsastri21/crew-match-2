@@ -40,12 +40,16 @@ export function ActionCell({ row }: { row: Row<CandidateRow> }) {
                             Assign to production
                         </DropdownMenuItem>
                     </DialogTrigger>
-                    <DropdownMenuItem>
-                        <span className="pr-2">
-                            <UserRoundMinus />
-                        </span>{" "}
-                        Remove from production
-                    </DropdownMenuItem>
+                    <DialogTrigger asChild>
+                        <DropdownMenuItem
+                            onSelect={() => setDialogMenu("remove")}
+                        >
+                            <span className="pr-2">
+                                <UserRoundMinus />
+                            </span>{" "}
+                            Remove from production
+                        </DropdownMenuItem>
+                    </DialogTrigger>
                     <DropdownMenuSeparator />
                     <DialogTrigger asChild>
                         <DropdownMenuItem
