@@ -23,7 +23,7 @@ import {
 import { Button } from "./ui/button";
 import { LoaderButton } from "./loader-button";
 import { useServerAction } from "zsa-react";
-import { uploadCandidateAction } from "@/app/admin/candidates/actions";
+import { uploadCandidateAction } from "@/components/candidates-table/actions";
 import { useToast } from "./ui/use-toast";
 
 interface FileUploadDialogProps {

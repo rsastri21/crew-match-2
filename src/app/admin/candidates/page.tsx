@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import CandidateUploadCard from "./_components/CandidateUploadCard";
 import { getAllCandidates } from "@/data/candidates";
 import { DataTable } from "@/components/ui/data-table";
-import { candidateTableColumnFactory } from "./_components/candidates-table/columns";
+import { candidateTableColumnFactory } from "@/components/candidates-table/columns";
 import { transformCandidatesToRowModel } from "@/utils/candidates";
 
 export default async function AdminCandidatePage() {

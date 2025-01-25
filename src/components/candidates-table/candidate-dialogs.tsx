@@ -13,7 +13,7 @@ import {
     assignCandidateAction,
     deleteCandidateAction,
     removeCandidateAction,
-} from "../../actions";
+} from "./actions";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { getProductionsWithAvailableRoles } from "@/utils/productionClientUtils";
