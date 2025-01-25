@@ -6,10 +6,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProductionWithRoles, UserWithCandidateProfile } from "@/db/schema";
 import MyProductionSection from "./MyProductionSection";
 import ProductionsSection from "@/components/ProductionsSection";
+import { CandidateRow } from "@/data/candidates";
 
 export interface ProductionHeadDashboardClientProps {
     user: UserWithCandidateProfile;
     productions: ProductionWithRoles[];
+    candidates: CandidateRow[];
     directors: string[];
 }
 
@@ -21,6 +23,12 @@ export default function ProductionHeadDashboardClient(
     );
     const production = index !== -1 ? props.productions[index] : undefined;
     const director = index !== -1 ? props.directors[index] : undefined;
+    const {
+        candidate,
+        production: userProduction,
+        profile,
+        ...user
+    } = props.user;
 
     return (
         <Tabs defaultValue="profile">
@@ -46,6 +54,8 @@ export default function ProductionHeadDashboardClient(
                     <MyProductionSection
                         production={production}
                         director={director}
+                        candidates={props.candidates}
+                        user={user}
                     />
                 </TabsContent>
                 <TabsContent className="w-full" value="productions">

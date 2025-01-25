@@ -20,7 +20,7 @@ export async function GET() {
 
     const { user } = await validateSessionToken(token.value);
 
-    if (!user || !user.isAdmin || (!user.isAdmin && user.role === "user")) {
+    if (!user || (!user.isAdmin && user.role === "user")) {
         return Response.json({ message: "Unauthorized" }, { status: 401 });
     }
 

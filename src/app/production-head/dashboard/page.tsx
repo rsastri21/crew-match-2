@@ -6,6 +6,8 @@ import {
     getProductionsInformation,
 } from "@/utils/productions";
 import { getUserCandidateProfile } from "@/utils/users";
+import { transformCandidatesToRowModel } from "@/utils/candidates";
+import { getAllCandidates } from "@/data/candidates";
 
 export default async function ProductionHeadDashboard() {
     const user = await getCurrentUser();
@@ -22,10 +24,14 @@ export default async function ProductionHeadDashboard() {
     const productionsWithRoles = await getProductionsInformation();
     const directors = await getDirectorsForProductions(productionsWithRoles);
 
+    const candidates = await getAllCandidates();
+    const rowCandidates = transformCandidatesToRowModel(candidates);
+
     return (
         <ProductionHeadDashboardClient
             user={userInfo}
             productions={productionsWithRoles}
+            candidates={rowCandidates}
             directors={directors}
         />
     );
