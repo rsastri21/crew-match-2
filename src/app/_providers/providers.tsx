@@ -2,11 +2,12 @@
 
 import { ReactNode } from "react";
 import { ThemeProvider } from "./theme-provider";
+import { QCProvider } from "./query-client-provider";
 
 export function Providers({ children }: { children: ReactNode }) {
     return (
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <QCProvider>{children}</QCProvider>
         </ThemeProvider>
     );
 }

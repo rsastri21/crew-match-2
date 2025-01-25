@@ -65,6 +65,18 @@ export async function getAllProductionsWithRoles() {
     return productions;
 }
 
+export async function getAllProductionsWithAvailableRoles() {
+    const productions = await db.query.productions.findMany({
+        with: {
+            roles: {
+                where: (role, { isNull }) => isNull(role.candidateId),
+            },
+        },
+    });
+
+    return productions;
+}
+
 export async function getProductionWithRoles(productionId: number) {
     const production = await db.query.productions.findFirst({
         where: eq(productions.id, productionId),

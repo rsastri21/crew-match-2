@@ -5,7 +5,7 @@ import { createSession, generateSessionToken, validateRequest } from "./auth";
 import { AuthenticationError } from "@/utils/errors";
 import { cookies } from "next/headers";
 
-const SESSION_COOKIE_NAME = "session";
+export const SESSION_COOKIE_NAME = "session";
 
 export const setSessionTokenCookie = (token: string, expiresAt: Date): void => {
     cookies().set(SESSION_COOKIE_NAME, token, {
