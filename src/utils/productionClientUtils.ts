@@ -1,4 +1,8 @@
-import { RoleWithCandidateName } from "@/db/schema";
+import {
+    Production,
+    ProductionAndRoles,
+    RoleWithCandidateName,
+} from "@/db/schema";
 
 export function getAmountFilled(roles: RoleWithCandidateName[]): {
     filled: number;
@@ -14,4 +18,16 @@ export function getAmountFilled(roles: RoleWithCandidateName[]): {
     }
 
     return { filled, total };
+}
+
+export async function getProductionsWithAvailableRoles(): Promise<
+    ProductionAndRoles[]
+> {
+    const response = await fetch("/api/productions", {
+        credentials: "include",
+    });
+    if (!response.ok) {
+        throw new Error("Unhealthy response returned.");
+    }
+    return response.json();
 }

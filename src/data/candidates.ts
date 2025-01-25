@@ -76,7 +76,11 @@ export async function updateCandidate(
 }
 
 export async function getAllCandidates() {
-    const candidates = await db.query.candidates.findMany();
+    const candidates = await db.query.candidates.findMany({
+        with: {
+            roles: true,
+        },
+    });
     return candidates;
 }
 

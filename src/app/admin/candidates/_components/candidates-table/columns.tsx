@@ -118,12 +118,16 @@ export const columns: ColumnDef<CandidateRow>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
-                                <span className="pr-2">
-                                    <UserRoundPlus />
-                                </span>{" "}
-                                Assign to production
-                            </DropdownMenuItem>
+                            <DialogTrigger asChild>
+                                <DropdownMenuItem
+                                    onSelect={() => setDialogMenu("assign")}
+                                >
+                                    <span className="pr-2">
+                                        <UserRoundPlus />
+                                    </span>{" "}
+                                    Assign to production
+                                </DropdownMenuItem>
+                            </DialogTrigger>
                             <DropdownMenuItem>
                                 <span className="pr-2">
                                     <UserRoundMinus />

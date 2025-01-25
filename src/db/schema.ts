@@ -213,3 +213,6 @@ export type RoleWithCandidateName = Role & {
 export type ProductionWithRoles = Production & {
     roles: RoleWithCandidateName[];
 };
+export type ProductionAndRoles = Production & {
+    roles: Role[];
+};

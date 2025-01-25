@@ -6,7 +6,7 @@ import {
     updateCandidate,
     batchCreateCandidates,
 } from "@/data/candidates";
-import { Candidate } from "@/db/schema";
+import { Candidate, Role } from "@/db/schema";
 import { cache } from "react";
 
 export async function registerCandidate(
@@ -48,17 +48,22 @@ export async function registerCandidate(
 }
 
 export function transformCandidatesToRowModel(
-    candidates: Candidate[]
+    candidates: (Candidate & { roles: Role[] })[]
 ): CandidateRow[] {
     const transformedCandidates: CandidateRow[] = [];
 
     for (const candidate of candidates) {
+        const status = candidate.isActing
+            ? "acting"
+            : candidate.roles.length > 0
+            ? "assigned"
+            : "available";
         transformedCandidates.push({
             id: candidate.id,
             name: candidate.name,
             yearsInUW: candidate.yearsInUW,
             quartersInLUX: candidate.quartersInLUX,
-            status: candidate.isActing ? "acting" : "available",
+            status,
             interestedProductions: candidate.interestedProductions ?? [],
             interestedRoles: candidate.interestedRoles ?? [],
         });
