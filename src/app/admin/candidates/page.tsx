@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import CandidateUploadCard from "./_components/CandidateUploadCard";
 import { getAllCandidates } from "@/data/candidates";
 import { DataTable } from "@/components/ui/data-table";
-import { columns } from "./_components/candidates-table/columns";
+import { candidateTableColumnFactory } from "./_components/candidates-table/columns";
 import { transformCandidatesToRowModel } from "@/utils/candidates";
 
 export default async function AdminCandidatePage() {
@@ -25,7 +25,11 @@ export default async function AdminCandidatePage() {
 
     return (
         <PageContainer heading={<PageHeading />}>
-            <DataTable columns={columns} data={rowCandidates} />
+            <DataTable
+                columnGenerator={candidateTableColumnFactory}
+                user={user}
+                data={rowCandidates}
+            />
             <CandidateUploadCard />
         </PageContainer>
     );

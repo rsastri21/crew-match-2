@@ -1,7 +1,9 @@
 import { ROLES } from "@/data/constants";
 import {
     createProduction,
+    getAllProductionsWithAvailableRoles,
     getAllProductionsWithRoles,
+    getProductionWithEmptyRoles,
     updateProduction,
 } from "@/data/productions";
 import {
@@ -10,7 +12,7 @@ import {
     getProductionDirectorName,
     PendingCreateRole,
 } from "@/data/roles";
-import { Production, ProductionWithRoles } from "@/db/schema";
+import { Production, ProductionWithRoles, User } from "@/db/schema";
 import { cache } from "react";
 
 export async function getDirectorsForProductions(
@@ -87,4 +89,16 @@ export async function editProduction(
     );
 
     return editedProduction;
+}
+
+export async function getAssignableProductions(user: User) {
+    /**
+     * A user that is a production head and not admin
+     * should only be able to assign a member to their own production.
+     */
+    if (!user.isAdmin && user.role === "production_head") {
+        const production = await getProductionWithEmptyRoles(user.id);
+        return production ? [production] : [];
+    }
+    return await getAllProductionsWithAvailableRoles();
 }

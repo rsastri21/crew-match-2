@@ -23,14 +23,17 @@ import {
 import { DataTablePagination } from "./data-table-pagination";
 import { useState } from "react";
 import { DataTableToolbar } from "./data-table-toolbar";
+import type { User } from "@/db/schema";
 
 interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[];
+    columnGenerator: (user: User) => ColumnDef<TData, TValue>[];
+    user: User;
     data: TData[];
 }
 
 export function DataTable<TData, TValue>({
-    columns,
+    columnGenerator,
+    user,
     data,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -38,6 +41,7 @@ export function DataTable<TData, TValue>({
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
         {}
     );
+    const columns = columnGenerator(user);
 
     const table = useReactTable({
         data,
