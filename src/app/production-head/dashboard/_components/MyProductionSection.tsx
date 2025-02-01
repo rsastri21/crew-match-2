@@ -1,6 +1,9 @@
 "use client";
 
-import { candidateTableColumnFactory } from "@/components/candidates-table/columns";
+import {
+    candidateFilters,
+    candidateTableColumnFactory,
+} from "@/components/candidates-table/columns";
 import ProductionInfoCard from "@/components/ProductionInfoCard";
 import SectionHeading from "@/components/SectionHeading";
 import { buttonVariants } from "@/components/ui/button";
@@ -62,11 +65,12 @@ export default function MyProductionSection(props: MyProductionSectionProps) {
                 <section className="w-full flex items-center">
                     <SectionHeading title="Candidates" />
                 </section>
-                <section className="px-2 py-1 max-w-full overflow-x-scroll">
+                <section className="px-2 py-1 max-w-full w-full overflow-x-scroll">
                     <DataTable
                         columnGenerator={candidateTableColumnFactory}
                         user={props.user}
                         data={props.candidates}
+                        filters={candidateFilters}
                     />
                 </section>
             </div>

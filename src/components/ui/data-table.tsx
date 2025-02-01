@@ -29,12 +29,17 @@ interface DataTableProps<TData, TValue> {
     columnGenerator: (user: User) => ColumnDef<TData, TValue>[];
     user: User;
     data: TData[];
+    filters: {
+        inputFilterColumn: Extract<keyof TData, string>;
+        inputFilterText: string;
+    }[];
 }
 
 export function DataTable<TData, TValue>({
     columnGenerator,
     user,
     data,
+    filters,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -62,11 +67,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <div className="w-full flex flex-col gap-2">
-            <DataTableToolbar
-                table={table}
-                inputFilterColumn="name"
-                inputFilterText="Filter candidates..."
-            />
+            <DataTableToolbar<TData> table={table} inputFilters={filters} />
             <div className="rounded-md border w-full">
                 <Table>
                     <TableHeader>

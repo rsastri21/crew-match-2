@@ -8,34 +8,38 @@ import { DataTableViewOptions } from "./data-table-view-options";
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;
-    inputFilterColumn: string;
-    inputFilterText: string;
+    inputFilters: {
+        inputFilterColumn: Extract<keyof TData, string>;
+        inputFilterText: string;
+    }[];
 }
 
 export function DataTableToolbar<TData>({
     table,
-    inputFilterColumn,
-    inputFilterText,
+    inputFilters,
 }: DataTableToolbarProps<TData>) {
     const isFiltered = table.getState().columnFilters.length > 0;
 
     return (
-        <div className="flex items-center justify-between">
-            <div className="flex flex-1 items-center space-x-3">
-                <Input
-                    placeholder={inputFilterText}
-                    value={
-                        (table
-                            .getColumn(inputFilterColumn)
-                            ?.getFilterValue() as string) ?? ""
-                    }
-                    onChange={(event) =>
-                        table
-                            .getColumn(inputFilterColumn)
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="h-8 w-[150px] lg:w-[250px]"
-                />
+        <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-3">
+                {inputFilters.map((filter) => (
+                    <Input
+                        key={filter.inputFilterColumn}
+                        placeholder={filter.inputFilterText}
+                        value={
+                            (table
+                                .getColumn(filter.inputFilterColumn)
+                                ?.getFilterValue() as string) ?? ""
+                        }
+                        onChange={(event) =>
+                            table
+                                .getColumn(filter.inputFilterColumn)
+                                ?.setFilterValue(event.target.value)
+                        }
+                        className="h-8 w-[150px] lg:w-[250px]"
+                    />
+                ))}
                 {isFiltered && (
                     <Button
                         variant="ghost"

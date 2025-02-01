@@ -67,6 +67,7 @@ export function candidateTableColumnFactory(
                     </div>
                 );
             },
+            filterFn: "arrIncludes",
         },
         {
             accessorKey: "interestedProductions",
@@ -82,6 +83,7 @@ export function candidateTableColumnFactory(
                     </div>
                 );
             },
+            filterFn: "arrIncludes",
         },
         {
             accessorKey: "status",
@@ -111,3 +113,18 @@ export function candidateTableColumnFactory(
         ...getActionsColumn(),
     ];
 }
+
+export const candidateFilters = [
+    {
+        inputFilterColumn: "name" as keyof CandidateRow,
+        inputFilterText: "Filter candidates...",
+    },
+    {
+        inputFilterColumn: "interestedRoles" as keyof CandidateRow,
+        inputFilterText: "Filter roles...",
+    },
+    {
+        inputFilterColumn: "interestedProductions" as keyof CandidateRow,
+        inputFilterText: "Filter productions...",
+    },
+];
