@@ -1,7 +1,8 @@
 "use server";
 
 import { deleteCandidate } from "@/data/candidates";
-import { updateRole } from "@/data/roles";
+import { getProductionById } from "@/data/productions";
+import { getRoleById, updateRole } from "@/data/roles";
 import { authenticatedAction } from "@/lib/safe-action";
 import { batchInsertCandidates } from "@/utils/candidates";
 import { revalidatePath } from "next/cache";
@@ -56,7 +57,28 @@ export const assignCandidateAction = authenticatedAction
 export const removeCandidateAction = authenticatedAction
     .createServerAction()
     .input(removeCandidateSchema)
-    .handler(async ({ input }) => {
+    .handler(async ({ input, ctx }) => {
+        const user = ctx.user;
+
+        /**
+         * If the user is a production head and not an admin,
+         * validate that they are trying to remove a candidate
+         * from their production.
+         */
+        if (!user.isAdmin && user.role === "production_head") {
+            const roleObj = await getRoleById(input.roleId);
+            if (!roleObj) {
+                throw new Error("Role does not exist.");
+            }
+
+            const production = await getProductionById(roleObj.productionId);
+            if (!production || production.userId !== user.id) {
+                throw new Error(
+                    "Cannot remove candidate from another production."
+                );
+            }
+        }
+
         await updateRole(input.roleId, { candidateId: null });
         revalidatePath("/admin/candidates");
     });

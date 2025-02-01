@@ -46,6 +46,14 @@ export async function getProductionByUserId(userId: string) {
     return production;
 }
 
+export async function getProductionById(productionId: number) {
+    const production = await db.query.productions.findFirst({
+        where: eq(productions.id, productionId),
+    });
+
+    return production;
+}
+
 // TODO: Add timestamp parameter once quarter sessions are setup
 export async function getAllProductionsWithRoles() {
     const productions = await db.query.productions.findMany({

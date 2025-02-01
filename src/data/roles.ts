@@ -51,6 +51,13 @@ export async function getRolesByProduction(productionId: number) {
     return productionRoles;
 }
 
+export async function getRoleById(roleId: number) {
+    const role = await db.query.roles.findFirst({
+        where: eq(roles.id, roleId),
+    });
+    return role;
+}
+
 export async function getProductionDirectorName(productionId: number) {
     const directorRole = await db.query.roles.findFirst({
         where: and(
