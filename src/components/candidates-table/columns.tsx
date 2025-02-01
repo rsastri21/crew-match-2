@@ -62,7 +62,9 @@ export function candidateTableColumnFactory(
                 return (
                     <div className="flex items-center justify-start">
                         {interestedRoles[0]?.length ? (
-                            <Badge>{interestedRoles[0]}</Badge>
+                            <Badge className="line-clamp-1">
+                                {interestedRoles[0]}
+                            </Badge>
                         ) : null}
                     </div>
                 );
@@ -79,7 +81,9 @@ export function candidateTableColumnFactory(
                     row.original.interestedProductions;
                 return (
                     <div className="flex flex-col items-start justify-start gap-2">
-                        <Badge>{interestedProductions[0]}</Badge>
+                        <Badge className="line-clamp-1">
+                            {interestedProductions[0]}
+                        </Badge>
                     </div>
                 );
             },

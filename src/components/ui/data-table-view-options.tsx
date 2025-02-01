@@ -51,7 +51,7 @@ export function DataTableViewOptions<TData>({
                                     column.toggleVisibility(!!value)
                                 }
                             >
-                                {column.id}
+                                {column.id.replace(/([a-z])([A-Z])/g, `$1 $2`)}
                             </DropdownMenuCheckboxItem>
                         );
                     })}

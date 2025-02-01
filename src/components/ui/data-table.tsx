@@ -29,7 +29,7 @@ interface DataTableProps<TData, TValue> {
     columnGenerator: (user: User) => ColumnDef<TData, TValue>[];
     user: User;
     data: TData[];
-    filters: {
+    filters?: {
         inputFilterColumn: Extract<keyof TData, string>;
         inputFilterText: string;
     }[];
@@ -67,7 +67,10 @@ export function DataTable<TData, TValue>({
 
     return (
         <div className="w-full flex flex-col gap-2">
-            <DataTableToolbar<TData> table={table} inputFilters={filters} />
+            <DataTableToolbar<TData>
+                table={table}
+                inputFilters={filters ?? []}
+            />
             <div className="rounded-md border w-full">
                 <Table>
                     <TableHeader>
