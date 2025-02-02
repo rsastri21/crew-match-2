@@ -55,6 +55,7 @@ export function transformUsersToRowModel(
             image: user.profile?.image ?? "",
             verified: !!user.emailVerified,
             role: user.role,
+            isAdmin: user.isAdmin ?? false,
         });
     }
 

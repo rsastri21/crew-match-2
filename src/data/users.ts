@@ -13,6 +13,7 @@ export type UserRow = {
     image: string;
     verified: boolean;
     role: "production_head" | "user";
+    isAdmin: boolean;
 };
 
 const ENTROPY_SIZE = 10;

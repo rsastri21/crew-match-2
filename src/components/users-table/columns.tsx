@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DataTableColumnHeader } from "../ui/data-table-column-header";
 import { Badge } from "../ui/badge";
+import { ActionCell } from "./actions-cell-component";
 
 export function userTableColumnFactory(user: User): ColumnDef<UserRow>[] {
     return [
@@ -28,6 +29,14 @@ export function userTableColumnFactory(user: User): ColumnDef<UserRow>[] {
             accessorKey: "name",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Name" />
+            ),
+            cell: ({ row }) => (
+                <span className="flex gap-2 items-center">
+                    {row.original.name}
+                    {row.original.isAdmin && (
+                        <div className="rounded-lg bg-green-600 dark:bg-green-400 w-2 h-2"></div>
+                    )}
+                </span>
             ),
         },
         {
@@ -90,6 +99,18 @@ export function userTableColumnFactory(user: User): ColumnDef<UserRow>[] {
                     </Badge>
                 </div>
             ),
+        },
+        {
+            accessorKey: "actions",
+            header: ({ column }) => (
+                <DataTableColumnHeader
+                    column={column}
+                    title="Actions"
+                    className="items-center justify-center"
+                    shouldNotSort
+                />
+            ),
+            cell: ({ row }) => <ActionCell row={row} />,
         },
     ];
 }
