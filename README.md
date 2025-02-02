@@ -29,7 +29,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-This project uses Docker to setup a local postgres database for development. It starts begins automatically when running the dev command and can be configured in the `docker-compose.yml` file.
+This project uses Docker to setup a local postgres database for development. It needs to be run alongside the dev server and can be configured in the `docker-compose.yml` file.
 
 Useful database targets:
 
