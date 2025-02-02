@@ -3,6 +3,7 @@ import {
     getCompleteUserInfo,
     getUserByEmail,
     updateUser,
+    UserRow,
     verifyPassword,
 } from "@/data/users";
 import {
@@ -38,6 +39,27 @@ import {
 } from "@/data/reset-tokens";
 import { ResetPasswordEmail } from "@/emails/reset-password";
 import { cache } from "react";
+import { Profile, User } from "@/db/schema";
+
+export function transformUsersToRowModel(
+    users: (User & { profile: Profile | null })[]
+) {
+    const transformedUsers: UserRow[] = [];
+
+    for (const user of users) {
+        transformedUsers.push({
+            id: user.id,
+            name: user.profile?.name ?? "",
+            pronouns: user.profile?.pronouns ?? "",
+            email: user.email ?? "",
+            image: user.profile?.image ?? "",
+            verified: !!user.emailVerified,
+            role: user.role,
+        });
+    }
+
+    return transformedUsers;
+}
 
 export async function registerUser(
     name: string,

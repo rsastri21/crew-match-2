@@ -5,6 +5,16 @@ import { getAccountByUserId } from "./accounts";
 import { hashPassword } from "./utils";
 import { encodeBase32LowerCaseNoPadding } from "@oslojs/encoding";
 
+export type UserRow = {
+    id: string;
+    name: string;
+    pronouns: string;
+    email: string;
+    image: string;
+    verified: boolean;
+    role: "production_head" | "user";
+};
+
 const ENTROPY_SIZE = 10;
 
 const generateIdFromEntropySize = (size: number): string => {
@@ -68,6 +78,16 @@ export async function getCompleteUserInfo(userId: string) {
     });
 
     return user;
+}
+
+export async function getAllUserProfiles() {
+    const users = await db.query.users.findMany({
+        with: {
+            profile: true,
+        },
+    });
+
+    return users;
 }
 
 export async function getUserCount() {
