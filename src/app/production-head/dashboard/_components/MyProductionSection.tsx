@@ -46,34 +46,36 @@ export default function MyProductionSection(props: MyProductionSectionProps) {
                 )}
             </div>
             {props.production ? (
-                <div className="w-full px-2 pb-2">
-                    <ProductionInfoCard
-                        productionName={props.production.name}
-                        director={props.director!}
-                        capacity={getAmountFilled(props.production.roles)}
-                        id={props.production.id}
-                        selectProduction={handleClickProduction}
-                        isSelected={false}
-                    />
-                </div>
+                <>
+                    <div className="w-full px-2 pb-2">
+                        <ProductionInfoCard
+                            productionName={props.production.name}
+                            director={props.director!}
+                            capacity={getAmountFilled(props.production.roles)}
+                            id={props.production.id}
+                            selectProduction={handleClickProduction}
+                            isSelected={false}
+                        />
+                    </div>
+                    <div className="w-full flex flex-col gap-2 justify-between items-center">
+                        <section className="w-full flex items-center">
+                            <SectionHeading title="Candidates" />
+                        </section>
+                        <section className="px-2 py-1 max-w-full w-full overflow-x-scroll">
+                            <DataTable
+                                columnGenerator={candidateTableColumnFactory}
+                                user={props.user}
+                                data={props.candidates}
+                                filters={candidateFilters}
+                            />
+                        </section>
+                    </div>
+                </>
             ) : (
                 <h1 className="text-lg font-light text-muted-foreground w-fit h-fit">
                     No production created.
                 </h1>
             )}
-            <div className="w-full flex flex-col gap-2 justify-between items-center">
-                <section className="w-full flex items-center">
-                    <SectionHeading title="Candidates" />
-                </section>
-                <section className="px-2 py-1 max-w-full w-full overflow-x-scroll">
-                    <DataTable
-                        columnGenerator={candidateTableColumnFactory}
-                        user={props.user}
-                        data={props.candidates}
-                        filters={candidateFilters}
-                    />
-                </section>
-            </div>
         </div>
     );
 }
