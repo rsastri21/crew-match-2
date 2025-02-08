@@ -1,5 +1,10 @@
 import PageContainer from "@/components/PageContainer";
+import {
+    productionFilters,
+    productionTableColumnFactory,
+} from "@/components/productions-table/columns";
 import TopHeading from "@/components/TopHeading";
+import { DataTable } from "@/components/ui/data-table";
 import { getAllProductionsWithRoles } from "@/data/productions";
 import { getCurrentUser } from "@/lib/session";
 import { transformProductionsToRowModel } from "@/utils/productions";
@@ -22,7 +27,12 @@ export default async function AdminProductionPage() {
 
     return (
         <PageContainer heading={<PageHeading />}>
-            <h1>Page content.</h1>
+            <DataTable
+                columnGenerator={productionTableColumnFactory}
+                user={user}
+                data={rowProductions}
+                filters={productionFilters}
+            />
         </PageContainer>
     );
 }
