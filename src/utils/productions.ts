@@ -4,16 +4,46 @@ import {
     getAllProductionsWithAvailableRoles,
     getAllProductionsWithRoles,
     getProductionWithEmptyRoles,
+    ProductionRow,
     updateProduction,
 } from "@/data/productions";
 import {
     createRoles,
     deleteRole,
     getProductionDirectorName,
+    getRolesByProduction,
     PendingCreateRole,
 } from "@/data/roles";
-import { Production, ProductionWithRoles, User } from "@/db/schema";
+import {
+    Production,
+    ProductionWithRoles,
+    RoleWithCandidateName,
+    User,
+} from "@/db/schema";
 import { cache } from "react";
+import { getAmountFilled } from "./productionClientUtils";
+import { getUserProfile } from "./users";
+
+export async function transformProductionsToRowModel(
+    productions: (Production & { roles: RoleWithCandidateName[] })[]
+) {
+    const rows: ProductionRow[] = [];
+
+    for (const production of productions) {
+        const userProfile = await getUserProfile(production.userId!);
+        const { filled, total } = getAmountFilled(production.roles);
+        rows.push({
+            id: production.id,
+            name: production.name,
+            roles: `${filled}/${total}`,
+            lead: userProfile.name ?? "",
+            createdAt: production.createdAt,
+            updatedAt: production.updatedAt,
+        });
+    }
+
+    return rows;
+}
 
 export async function getDirectorsForProductions(
     productions: ProductionWithRoles[]

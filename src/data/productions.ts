@@ -2,6 +2,15 @@ import { db } from "@/db";
 import { Production, productions } from "@/db/schema";
 import { count, eq } from "drizzle-orm";
 
+export type ProductionRow = {
+    id: number;
+    name: string;
+    roles: string;
+    lead: string;
+    createdAt: Date;
+    updatedAt: Date;
+};
+
 export async function createProduction(
     name: string,
     genre: string,

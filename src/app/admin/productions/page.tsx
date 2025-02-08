@@ -1,6 +1,8 @@
 import PageContainer from "@/components/PageContainer";
 import TopHeading from "@/components/TopHeading";
+import { getAllProductionsWithRoles } from "@/data/productions";
 import { getCurrentUser } from "@/lib/session";
+import { transformProductionsToRowModel } from "@/utils/productions";
 import { getDashboardUrl } from "@/utils/redirects";
 import { redirect } from "next/navigation";
 
@@ -15,6 +17,9 @@ export default async function AdminProductionPage() {
         redirect(getDashboardUrl(user.role));
     }
 
+    const productions = await getAllProductionsWithRoles();
+    const rowProductions = await transformProductionsToRowModel(productions);
+
     return (
         <PageContainer heading={<PageHeading />}>
             <h1>Page content.</h1>
@@ -24,7 +29,7 @@ export default async function AdminProductionPage() {
 
 function PageHeading() {
     return (
-        <div className="w-full py-6 flex flex-col">
+        <div className="w-full pt-6 flex flex-col">
             <TopHeading text="Manage Productions" />
         </div>
     );
