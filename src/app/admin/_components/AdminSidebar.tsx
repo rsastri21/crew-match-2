@@ -14,7 +14,13 @@ import {
     SidebarRail,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { BookUser, Clapperboard, House, Users } from "lucide-react";
+import {
+    BookUser,
+    CalendarCog,
+    Clapperboard,
+    House,
+    Users,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -48,9 +54,38 @@ const ADMIN_QUICK_LINKS: SideBarItem[] = [
     },
 ];
 
-export default function AdminSidebar() {
+const MORE_TOOLS_ITEMS: SideBarItem[] = [
+    {
+        url: "/admin/sessions",
+        title: "Sessions",
+        icon: CalendarCog,
+    },
+];
+
+function generateSidebarLinks(items: SideBarItem[]) {
     const pathname = usePathname();
 
+    return items.map((item) => (
+        <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton asChild isActive={item.url === pathname}>
+                <Link
+                    href={item.url}
+                    className={cn(
+                        buttonVariants({
+                            variant: "ghost",
+                        }),
+                        "w-full items-center justify-start"
+                    )}
+                >
+                    <item.icon className="w-4 h-4" />
+                    <span>{item.title}</span>
+                </Link>
+            </SidebarMenuButton>
+        </SidebarMenuItem>
+    ));
+}
+
+export default function AdminSidebar() {
     return (
         <Sidebar collapsible="offcanvas">
             <SidebarHeader>
@@ -70,27 +105,15 @@ export default function AdminSidebar() {
                     <SidebarGroupLabel>Quick links</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {ADMIN_QUICK_LINKS.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton
-                                        asChild
-                                        isActive={item.url === pathname}
-                                    >
-                                        <Link
-                                            href={item.url}
-                                            className={cn(
-                                                buttonVariants({
-                                                    variant: "ghost",
-                                                }),
-                                                "w-full items-center justify-start"
-                                            )}
-                                        >
-                                            <item.icon className="w-4 h-4" />
-                                            <span>{item.title}</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+                            {generateSidebarLinks(ADMIN_QUICK_LINKS)}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+                <SidebarGroup>
+                    <SidebarGroupLabel>More tools</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            {generateSidebarLinks(MORE_TOOLS_ITEMS)}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
