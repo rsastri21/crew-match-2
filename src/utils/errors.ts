@@ -11,6 +11,13 @@ export class AuthenticationError extends PublicError {
     }
 }
 
+export class AdminError extends PublicError {
+    constructor() {
+        super("You must be an admin to perform this operation");
+        this.name = "AdminError";
+    }
+}
+
 export class EmailInUseError extends PublicError {
     constructor() {
         super("Email is already in use");

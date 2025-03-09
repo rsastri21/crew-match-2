@@ -5,6 +5,7 @@ import {
     getCandidatesBySimilarName,
     updateCandidate,
     batchCreateCandidates,
+    getAvailableCandidates,
 } from "@/data/candidates";
 import { Candidate, Role } from "@/db/schema";
 import { cache } from "react";
@@ -141,3 +142,13 @@ export const getCandidatesWithEditDistance = cache(
         );
     }
 );
+
+export const getCandidatesForMatching = async () => {
+    const candidates = await getAvailableCandidates();
+
+    if (!candidates.length) {
+        throw new Error("No candidates available to match.");
+    }
+
+    return candidates;
+};

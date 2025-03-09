@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { Role, roles } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 export type PendingCreateRole = {
     role: string;
@@ -42,6 +42,20 @@ export async function updateRole(roleId: number, updatedRole: Partial<Role>) {
         .where(eq(roles.id, roleId))
         .returning();
     return role;
+}
+
+export async function batchUpdateRoles(rolesToInsert: Role[]) {
+    const insertedRoles = await db
+        .insert(roles)
+        .values(rolesToInsert)
+        .onConflictDoUpdate({
+            target: roles.id,
+            set: {
+                candidateId: sql`excluded.candidate_id`,
+            },
+        })
+        .returning();
+    return insertedRoles;
 }
 
 export async function getRolesByProduction(productionId: number) {

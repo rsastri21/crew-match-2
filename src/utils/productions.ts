@@ -11,7 +11,6 @@ import {
     createRoles,
     deleteRole,
     getProductionDirectorName,
-    getRolesByProduction,
     PendingCreateRole,
 } from "@/data/roles";
 import {
@@ -131,4 +130,14 @@ export async function getAssignableProductions(user: User) {
         return production ? [production] : [];
     }
     return await getAllProductionsWithAvailableRoles();
+}
+
+export async function getProductionsForMatching() {
+    const productions = await getAllProductionsWithAvailableRoles();
+
+    if (!productions.length) {
+        throw new Error("No productions available for matching.");
+    }
+
+    return productions;
 }

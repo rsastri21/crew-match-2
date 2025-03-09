@@ -1,6 +1,6 @@
 import { db } from "@/db";
-import { Candidate, candidates, Role } from "@/db/schema";
-import { count, eq, ilike, sql } from "drizzle-orm";
+import { Candidate, candidates, Role, roles } from "@/db/schema";
+import { count, eq, ilike, sql, and, isNull } from "drizzle-orm";
 
 export type CandidateRow = {
     id: number;
@@ -119,6 +119,16 @@ export async function getCandidatesBySimilarName(name: string) {
         ),
     });
     return matchingCandidates;
+}
+
+export async function getAvailableCandidates() {
+    const availableCandidates = await db
+        .select()
+        .from(candidates)
+        .leftJoin(roles, eq(candidates.id, roles.candidateId))
+        .where(and(eq(candidates.isActing, false), isNull(roles.candidateId)));
+    const result = availableCandidates.map((candidate) => candidate.candidates);
+    return result;
 }
 
 export async function getCandidateCount() {

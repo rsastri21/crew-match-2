@@ -84,7 +84,7 @@ export class MatchService {
         return undefined;
     }
 
-    private match() {
+    public match() {
         /**
          * Define output arrays.
          * Returns the roles to be updated and the candidates that

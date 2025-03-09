@@ -10,6 +10,7 @@ import { getCurrentUser } from "@/lib/session";
 import { transformProductionsToRowModel } from "@/utils/productions";
 import { getDashboardUrl } from "@/utils/redirects";
 import { redirect } from "next/navigation";
+import MatchCard from "./_components/MatchCard";
 
 export default async function AdminProductionPage() {
     const user = await getCurrentUser();
@@ -33,6 +34,7 @@ export default async function AdminProductionPage() {
                 data={rowProductions}
                 filters={productionFilters}
             />
+            <MatchCard />
         </PageContainer>
     );
 }
