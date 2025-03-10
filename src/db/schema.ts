@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import {
     boolean,
     integer,
+    jsonb,
     pgEnum,
     pgTable,
     serial,
@@ -17,6 +18,17 @@ export const accountTypeEnum = pgEnum("account_type", [
 ]);
 
 export const roleEnum = pgEnum("role", ["user", "production_head"]);
+
+export const configs = pgTable("configs", {
+    id: integer("id").primaryKey(), // Using int type here so it does not auto-increment
+    session: jsonb("session")
+        .$type<{
+            candidate: string;
+            production: string;
+        }>()
+        .notNull()
+        .default({ candidate: "", production: "" }),
+});
 
 export const users = pgTable("user", {
     id: text("id").primaryKey(),
@@ -216,3 +228,4 @@ export type ProductionWithRoles = Production & {
 export type ProductionAndRoles = Production & {
     roles: Role[];
 };
+export type Config = typeof configs.$inferSelect;

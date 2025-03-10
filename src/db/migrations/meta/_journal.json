@@ -50,6 +50,20 @@
       "when": 1730061147206,
       "tag": "0006_cloudy_mephisto",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1741572386633,
+      "tag": "0007_serious_silk_fever",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1741573860194,
+      "tag": "0008_calm_norman_osborn",
+      "breakpoints": true
     }
   ]
 }
