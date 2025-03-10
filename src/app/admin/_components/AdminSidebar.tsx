@@ -62,9 +62,7 @@ const MORE_TOOLS_ITEMS: SideBarItem[] = [
     },
 ];
 
-function generateSidebarLinks(items: SideBarItem[]) {
-    const pathname = usePathname();
-
+function generateSidebarLinks(items: SideBarItem[], pathname: string) {
     return items.map((item) => (
         <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild isActive={item.url === pathname}>
@@ -86,6 +84,8 @@ function generateSidebarLinks(items: SideBarItem[]) {
 }
 
 export default function AdminSidebar() {
+    const pathname = usePathname();
+
     return (
         <Sidebar collapsible="offcanvas">
             <SidebarHeader>
@@ -105,7 +105,7 @@ export default function AdminSidebar() {
                     <SidebarGroupLabel>Quick links</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {generateSidebarLinks(ADMIN_QUICK_LINKS)}
+                            {generateSidebarLinks(ADMIN_QUICK_LINKS, pathname)}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -113,7 +113,7 @@ export default function AdminSidebar() {
                     <SidebarGroupLabel>More tools</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {generateSidebarLinks(MORE_TOOLS_ITEMS)}
+                            {generateSidebarLinks(MORE_TOOLS_ITEMS, pathname)}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
