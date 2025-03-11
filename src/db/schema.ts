@@ -28,6 +28,18 @@ export const configs = pgTable("configs", {
         }>()
         .notNull()
         .default({ candidate: "", production: "" }),
+    candidateRegistration: jsonb("candidate_registration")
+        .$type<{
+            enabled: boolean;
+        }>()
+        .notNull()
+        .default({ enabled: false }),
+    productionCreation: jsonb("production_creation")
+        .$type<{
+            enabled: boolean;
+        }>()
+        .notNull()
+        .default({ enabled: false }),
 });
 
 export const users = pgTable("user", {

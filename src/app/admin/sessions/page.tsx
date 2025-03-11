@@ -4,7 +4,16 @@ import { getCurrentUser } from "@/lib/session";
 import { getDashboardUrl } from "@/utils/redirects";
 import { redirect } from "next/navigation";
 import RegistrationCodeCard from "./_components/RegistrationCodeCard";
-import { getSessionCodes } from "@/data/configs";
+import {
+    getCandidateRegistrationStatus,
+    getProductionCreationStatus,
+    getSessionCodes,
+} from "@/data/configs";
+import {
+    CandidateRegistrationSwitch,
+    ProductionCreationSwitch,
+} from "./_components/RegistrationSwitches";
+import NewSessionCard from "./_components/NewSessionCard";
 
 export default async function AdminSessionPage() {
     const user = await getCurrentUser();
@@ -18,6 +27,10 @@ export default async function AdminSessionPage() {
     }
 
     const { candidate, production } = await getSessionCodes();
+    const [candidateRegistration, productionCreation] = await Promise.all([
+        getCandidateRegistrationStatus(),
+        getProductionCreationStatus(),
+    ]);
 
     return (
         <PageContainer heading={<PageHeading />}>
@@ -26,13 +39,18 @@ export default async function AdminSessionPage() {
                 description="Provide the code below to users to allow them to register
                     this quarter."
                 code={candidate}
-            />
+            >
+                <CandidateRegistrationSwitch enabled={candidateRegistration} />
+            </RegistrationCodeCard>
             <RegistrationCodeCard
                 title="Production Creation"
                 description="Provide the code below to production heads to allow them to create a production
                     this quarter."
                 code={production}
-            />
+            >
+                <ProductionCreationSwitch enabled={productionCreation} />
+            </RegistrationCodeCard>
+            <NewSessionCard />
         </PageContainer>
     );
 }

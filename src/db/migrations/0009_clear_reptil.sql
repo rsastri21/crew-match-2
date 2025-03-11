@@ -1,0 +1,2 @@
+ALTER TABLE "configs" ADD COLUMN "candidate_registration" jsonb DEFAULT '{"enabled":false}'::jsonb NOT NULL;--> statement-breakpoint
+ALTER TABLE "configs" ADD COLUMN "production_creation" jsonb DEFAULT '{"enabled":false}'::jsonb NOT NULL;

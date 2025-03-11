@@ -2,15 +2,16 @@ import { db } from "@/db";
 import { Config, configs } from "@/db/schema";
 import { randomBytes } from "crypto";
 import { eq } from "drizzle-orm";
+import { cache } from "react";
 
 const CONFIG_ID = 1;
 const SESSION_CODE_LENGTH = 3;
 
-async function getConfigs() {
+const getConfigs = cache(async function () {
     return db.query.configs.findFirst({
         where: eq(configs.id, CONFIG_ID),
     });
-}
+});
 
 /**
  * The configs object is treated like an AppConfig.
@@ -32,13 +33,14 @@ async function createConfig(attributes: Partial<Omit<Config, "id">>) {
 }
 
 async function updateConfig<T extends keyof Omit<Config, "id">>(
+    key: T,
     attribute: Config[T]
 ) {
     const config = (await getConfigs()) ?? { id: CONFIG_ID };
 
     const updatedConfig = {
         ...config,
-        ...attribute,
+        [key]: attribute,
     };
     return db
         .update(configs)
@@ -77,5 +79,23 @@ export async function createNewSession() {
         candidate: generateSessionCode(),
         production: generateSessionCode(),
     };
-    await updateConfig<"session">(session);
+    await updateConfig("session", session);
+}
+
+export async function getCandidateRegistrationStatus() {
+    const config = await getConfigs();
+    return config?.candidateRegistration.enabled ?? false;
+}
+
+export async function getProductionCreationStatus() {
+    const config = await getConfigs();
+    return config?.productionCreation.enabled ?? false;
+}
+
+export async function updateCandidateRegistrationStatus(enabled: boolean) {
+    await updateConfig("candidateRegistration", { enabled });
+}
+
+export async function updateProductionCreationStatus(enabled: boolean) {
+    await updateConfig("productionCreation", { enabled });
 }

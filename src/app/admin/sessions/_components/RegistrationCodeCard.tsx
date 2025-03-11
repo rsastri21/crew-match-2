@@ -9,11 +9,13 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { ClipboardCopy } from "lucide-react";
+import { ReactNode } from "react";
 
 interface RegistrationCodeCardProps {
     title: string;
     description: string;
     code: string;
+    children?: ReactNode;
 }
 
 export default function RegistrationCodeCard(props: RegistrationCodeCardProps) {
@@ -32,6 +34,7 @@ export default function RegistrationCodeCard(props: RegistrationCodeCardProps) {
                 <CardTitle>{props.title}</CardTitle>
                 <CardDescription>{props.description}</CardDescription>
             </CardHeader>
+            {props.children}
             <section className="w-full h-16 bg-primary-foreground rounded-lg flex items-center justify-center relative">
                 <span className="font-mono font-semibold text-xl tracking-widest">
                     {props.code}
