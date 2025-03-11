@@ -12,6 +12,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface CardRow {
     label: string;
@@ -23,9 +24,13 @@ interface RegistrationCardProps {
     content: CardRow[];
 }
 
-export default function RegistrationSection(
-    userInfo: UserWithCandidateProfile
-) {
+export default function RegistrationSection({
+    userInfo,
+    isRegistrationOpen,
+}: {
+    userInfo: UserWithCandidateProfile;
+    isRegistrationOpen: boolean;
+}) {
     const registrationData: RegistrationCardProps[] = [
         {
             title: "Basic Information",
@@ -99,21 +104,25 @@ export default function RegistrationSection(
                         </Tooltip>
                     </TooltipProvider>
                 </div>
-                <Link
-                    href={
-                        userInfo.candidate
-                            ? "/candidate/register"
-                            : "/candidate/discover"
-                    }
-                    className={cn(
-                        buttonVariants({ variant: "default" }),
-                        "mx-2",
-                        "w-full",
-                        "md:w-fit"
-                    )}
-                >
-                    Edit Information
-                </Link>
+                {isRegistrationOpen ? (
+                    <Link
+                        href={
+                            userInfo.candidate
+                                ? "/candidate/register"
+                                : "/candidate/discover"
+                        }
+                        className={cn(
+                            buttonVariants({ variant: "default" }),
+                            "mx-2",
+                            "w-full",
+                            "md:w-fit"
+                        )}
+                    >
+                        Edit Information
+                    </Link>
+                ) : (
+                    <Badge className="text-md">Registration Unavailable</Badge>
+                )}
             </div>
             <SectionRow<RegistrationCardProps>
                 data={userInfo.candidate ? registrationData : []}

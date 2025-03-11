@@ -36,6 +36,7 @@ import { buttonVariants } from "@/components/ui/button";
 const candidateSchema = z.object({
     name: z.string(),
     userId: z.string(),
+    registrationCode: z.string().min(6).max(6),
     yearsInUW: z
         .string()
         .min(1, { message: "A value for years in UW is required." }),
@@ -49,9 +50,11 @@ const candidateSchema = z.object({
 export default function CandidateRegistration({
     userInfo,
     productions,
+    isRegistrationOpen,
 }: {
     userInfo: UserWithCandidateProfile;
     productions: string[];
+    isRegistrationOpen: boolean;
 }) {
     const { toast } = useToast();
 
@@ -93,6 +96,7 @@ export default function CandidateRegistration({
             userId: userInfo.id,
             yearsInUW: userInfo.candidate?.yearsInUW?.toString() || "0",
             quartersInLUX: userInfo.candidate?.quartersInLUX?.toString() || "0",
+            registrationCode: "",
             isActing: userInfo.candidate?.isActing || false,
             prioritizeProductions:
                 userInfo.candidate?.prioritizeProductions || true,
@@ -198,6 +202,35 @@ export default function CandidateRegistration({
                                             placeholder="Enter quarters in LUX"
                                             type="number"
                                             min={0}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="registrationCode"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        <span className="flex w-full items-center justify-between">
+                                            Registration Code
+                                            <FormHelpTip>
+                                                <p>
+                                                    Enter the registration code
+                                                    for this quarter. This can
+                                                    be retrieved from a LUX
+                                                    officer.
+                                                </p>
+                                            </FormHelpTip>
+                                        </span>
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            className="w-full"
+                                            placeholder="Enter registration code"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -367,6 +400,7 @@ export default function CandidateRegistration({
                             isLoading={isPending}
                             className="w-fit"
                             type="submit"
+                            disabled={!isRegistrationOpen}
                         >
                             Submit
                         </LoaderButton>

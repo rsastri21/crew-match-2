@@ -7,6 +7,7 @@ import {
     getDirectorsForProductions,
     getProductionsInformation,
 } from "@/utils/productions";
+import { getCandidateRegistrationStatus } from "@/data/configs";
 
 export default async function UserDashboard() {
     const user = await getCurrentUser();
@@ -19,6 +20,7 @@ export default async function UserDashboard() {
     const assignments = await getCandidateAssignments(user.id);
     const productionsWithRoles = await getProductionsInformation();
     const directors = await getDirectorsForProductions(productionsWithRoles);
+    const isRegistrationOpen = await getCandidateRegistrationStatus();
 
     return (
         <UserDashboardClient
@@ -26,6 +28,7 @@ export default async function UserDashboard() {
             assignments={assignments}
             productions={productionsWithRoles}
             directors={directors}
+            isRegistrationOpen={isRegistrationOpen}
         />
     );
 }

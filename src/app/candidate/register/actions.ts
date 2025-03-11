@@ -1,5 +1,6 @@
 "use server";
 
+import { validateSessionCode } from "@/data/configs";
 import { authenticatedAction } from "@/lib/safe-action";
 import { registerCandidate } from "@/utils/candidates";
 import { redirect } from "next/navigation";
@@ -11,6 +12,7 @@ export const createCandidateAction = authenticatedAction
         z.object({
             name: z.string(),
             userId: z.string(),
+            registrationCode: z.string().min(6).max(6),
             yearsInUW: z.number().nonnegative(),
             quartersInLUX: z.number().nonnegative(),
             isActing: z.boolean(),
@@ -23,6 +25,18 @@ export const createCandidateAction = authenticatedAction
         })
     )
     .handler(async ({ input }) => {
+        /**
+         * Validate that the registration code is correct
+         * before registering.
+         */
+        const isValidCode = await validateSessionCode(
+            "candidate",
+            input.registrationCode
+        );
+        if (!isValidCode) {
+            throw new Error("Invalid registration code.");
+        }
+
         await registerCandidate(
             input.name,
             input.userId,

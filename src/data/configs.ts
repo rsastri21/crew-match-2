@@ -74,6 +74,18 @@ export async function getSessionCodes() {
     return config.session!;
 }
 
+export async function validateSessionCode(
+    type: "candidate" | "production",
+    code: string
+) {
+    const config = await getConfigs();
+    const sessionCode =
+        type === "candidate"
+            ? config?.session.candidate
+            : config?.session.production;
+    return sessionCode === code;
+}
+
 export async function createNewSession() {
     const session = {
         candidate: generateSessionCode(),

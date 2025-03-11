@@ -17,6 +17,7 @@ export interface UserDashboardClientProps {
     assignments: Role[];
     productions: ProductionWithRoles[];
     directors: string[];
+    isRegistrationOpen: boolean;
 }
 
 export default function UserDashboardClient(props: UserDashboardClientProps) {
@@ -43,7 +44,10 @@ export default function UserDashboardClient(props: UserDashboardClientProps) {
                 <TabsContent className="w-full" value="profile">
                     <AssignmentsSection assignments={props.assignments} />
                     <Separator />
-                    <RegistrationSection {...props.user} />
+                    <RegistrationSection
+                        userInfo={props.user}
+                        isRegistrationOpen={props.isRegistrationOpen}
+                    />
                 </TabsContent>
                 <TabsContent className="w-full" value="productions">
                     <ProductionsSection
