@@ -43,7 +43,7 @@ export const deleteCandidateAction = authenticatedAction
     .input(deleteCandidateSchema)
     .handler(async ({ input }) => {
         await deleteCandidate(input.id);
-        revalidatePath("/admin/candidates");
+        revalidatePath("/");
     });
 
 export const assignCandidateAction = authenticatedAction
@@ -72,7 +72,7 @@ export const assignCandidateAction = authenticatedAction
         }
 
         await updateRole(input.roleId, { candidateId: input.id });
-        revalidatePath("/admin/candidates");
+        revalidatePath("/");
     });
 
 export const removeCandidateAction = authenticatedAction
@@ -101,5 +101,5 @@ export const removeCandidateAction = authenticatedAction
         }
 
         await updateRole(input.roleId, { candidateId: null });
-        revalidatePath("/admin/candidates");
+        revalidatePath("/");
     });

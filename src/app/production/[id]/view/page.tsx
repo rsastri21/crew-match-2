@@ -1,13 +1,21 @@
+import {
+    candidateFilters,
+    candidateTableColumnFactory,
+} from "@/components/candidates-table/columns";
 import ProductionMemberCard from "@/components/ProductionMemberCard";
 import ProductionSubInfoCard from "@/components/ProductionSubInfoCard";
+import SectionHeading from "@/components/SectionHeading";
 import TopHeading from "@/components/TopHeading";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
 import { Separator } from "@/components/ui/separator";
+import { getAllCandidates } from "@/data/candidates";
 import { getProductionWithRoles } from "@/data/productions";
 import { getProductionDirectorName } from "@/data/roles";
 import { getCurrentUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
+import { transformCandidatesToRowModel } from "@/utils/candidates";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -24,6 +32,8 @@ export default async function ViewProductionPage({
 
     const production = await getProductionWithRoles(params.id);
     const director = await getProductionDirectorName(params.id);
+    const candidates = await getAllCandidates();
+    const rowCandidates = transformCandidatesToRowModel(candidates);
 
     if (!production) {
         return (
@@ -71,9 +81,7 @@ export default async function ViewProductionPage({
                     >
                         View pitch
                     </Link>
-                    {!isProductionLeader ? (
-                        <Button>I&apos;m interested</Button>
-                    ) : (
+                    {isProductionLeader ? (
                         <Link
                             href={`/production/${production.id}/edit`}
                             className={cn(
@@ -83,11 +91,11 @@ export default async function ViewProductionPage({
                         >
                             Edit
                         </Link>
-                    )}
+                    ) : null}
                 </div>
             </section>
             <Separator />
-            <div className="w-full h-fit my-8 overflow-y-scroll grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="px-2 w-full h-fit my-4 overflow-y-scroll grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div className="w-full col-span-1 flex flex-col gap-4">
                     {productionSubInfoMap.map((productionSubInfo) => (
                         <ProductionSubInfoCard
@@ -106,6 +114,21 @@ export default async function ViewProductionPage({
                     />
                 </div>
             </div>
+            {(isProductionLeader || user.isAdmin) && (
+                <div className="w-full flex flex-col gap-2 justify-between items-center">
+                    <section className="w-full flex items-center">
+                        <SectionHeading title="Candidates" />
+                    </section>
+                    <section className="px-2 py-1 max-w-full w-full overflow-x-scroll">
+                        <DataTable
+                            columnGenerator={candidateTableColumnFactory}
+                            user={user}
+                            data={rowCandidates}
+                            filters={candidateFilters}
+                        />
+                    </section>
+                </div>
+            )}
         </div>
     );
 }

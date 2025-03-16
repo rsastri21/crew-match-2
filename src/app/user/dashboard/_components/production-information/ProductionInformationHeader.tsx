@@ -33,13 +33,12 @@ export default function ProductionInformationHeader(
                 <Link
                     href={props.pitchLink}
                     className={cn(
-                        buttonVariants({ variant: "secondary" }),
+                        buttonVariants({ variant: "default" }),
                         "w-fit"
                     )}
                 >
                     View pitch
                 </Link>
-                <Button>I&apos;m interested</Button>
             </div>
         </CardHeader>
     );
