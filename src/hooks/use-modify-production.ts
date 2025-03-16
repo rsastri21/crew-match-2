@@ -4,6 +4,27 @@ import { useState } from "react";
 
 export type Roles = PartialBy<RoleWithCandidateName, "id">;
 
+/**
+ * Utility function that gets the difference between two arrays depending on the provided
+ * object keys.
+ *
+ * ex:
+ * arr1: [{ id: 1, name: 'Anthony' }, { id: 2, name: 'Brandon' }]
+ * arr2: [{ id: 1, name: 'Andrew' }, { id: 2, name: 'Brandon' }]
+ *
+ * getDifference(arr1, arr2, "id", "name") -> [{ id: 1, name: 'Anthony' }]
+ *
+ * @param array1
+ * @param array2
+ * @param keys
+ * @returns
+ */
+function getDifference<T>(array1: T[], array2: T[], ...keys: Array<keyof T>) {
+    return array1.filter(
+        (obj1) => !array2.some((obj2) => keys.every((k) => obj1[k] === obj2[k]))
+    );
+}
+
 function useModifyProduction(production?: ProductionWithRoles) {
     const [roles, setRoles] = useState<Roles[]>(production?.roles ?? []);
     const [rolesToDelete, setRolesToDelete] = useState<Roles[]>([]);
@@ -30,6 +51,21 @@ function useModifyProduction(production?: ProductionWithRoles) {
         setRoles(newRoles);
     };
 
+    const handleDropCandidate = (index: number) => {
+        const newRoles = roles.map((role, i) => {
+            if (index === i) {
+                return {
+                    ...role,
+                    candidateId: null,
+                    candidate: null,
+                };
+            } else {
+                return role;
+            }
+        });
+        setRoles(newRoles);
+    };
+
     const getSubmissionExpectations = () => {
         const rolesToSubmit: string[] = roles.reduce((acc: string[], curr) => {
             if (!curr.id) {
@@ -40,9 +76,17 @@ function useModifyProduction(production?: ProductionWithRoles) {
         const roleIdsToDelete: number[] = rolesToDelete.map(
             (roleToDelete) => roleToDelete.id!
         );
+        const rolesToEdit: Roles[] = getDifference(
+            roles.filter((role) => role.id),
+            production?.roles ?? [],
+            "id",
+            "role",
+            "candidateId"
+        );
         return {
             create: rolesToSubmit,
             delete: roleIdsToDelete,
+            edit: rolesToEdit,
         };
     };
 
@@ -55,6 +99,7 @@ function useModifyProduction(production?: ProductionWithRoles) {
         roles,
         handleAddRole,
         handleRemoveRole,
+        handleDropCandidate,
         getSubmissionExpectations,
         reset,
     };
