@@ -6,6 +6,13 @@ import type { CandidateRow } from "@/data/candidates";
 import { ColumnDef } from "@tanstack/react-table";
 import { ActionCell } from "./actions-cell-component";
 import type { User } from "@/db/schema";
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "../ui/hover-card";
+import { Separator } from "../ui/separator";
+import HoverCardList from "./hover-card-list";
 
 export function candidateTableColumnFactory(
     user: User
@@ -35,6 +42,56 @@ export function candidateTableColumnFactory(
             accessorKey: "name",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Name" />
+            ),
+            cell: ({ row }) => (
+                <HoverCard openDelay={200}>
+                    <HoverCardTrigger>{row.original.name}</HoverCardTrigger>
+                    <HoverCardContent className="w-64 flex flex-col gap-2">
+                        <div className="w-full flex justify-between items-center">
+                            <h1 className="text-lg font-medium">
+                                {row.original.name}
+                            </h1>
+                            <Badge className="text-xs font-medium">
+                                {row.original.status}
+                            </Badge>
+                        </div>
+                        <Separator />
+                        <HoverCardList
+                            title="Productions"
+                            values={row.original.interestedProductions}
+                            disambiguator={row.original.name}
+                        />
+                        {row.original.status !== "acting" && (
+                            <HoverCardList
+                                title="Roles"
+                                values={row.original.interestedRoles}
+                                disambiguator={row.original.name}
+                            />
+                        )}
+                        {row.original.roles.length ? (
+                            <>
+                                <Separator />
+                                <div className="w-full flex flex-col gap-1">
+                                    <h3 className="text-sm font-medium w-full">
+                                        Assigned Roles
+                                    </h3>
+                                    <ol className="list-disc list-inside">
+                                        {row.original.roles.map(
+                                            (role, index) => (
+                                                <li
+                                                    key={`${row.original.name}_${role}_${index}`}
+                                                >
+                                                    {role.role},{" "}
+                                                    {role.production}
+                                                </li>
+                                            )
+                                        )}
+                                    </ol>
+                                </div>
+                            </>
+                        ) : null}
+                    </HoverCardContent>
+                </HoverCard>
             ),
         },
         {
