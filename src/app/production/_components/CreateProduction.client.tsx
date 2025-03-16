@@ -49,24 +49,20 @@ const productionSchema = z.object({
     }),
     pitchLink: z.string().url(),
     userId: z.string(),
+    creationCode: z.string(),
 });
 
 export default function CreateProduction({
     user,
     production,
+    isProductionCreationAvailable,
 }: {
     user: User;
     production?: ProductionWithRoles;
+    isProductionCreationAvailable?: boolean;
 }) {
     const { toast } = useToast();
     const isEdit = production ? true : false;
-
-    /**
-     * TODO:
-     * Logic to use different server action for edit vs. create flow
-     * Better UX on adding removing roles? Toast?
-     * DB integration
-     */
 
     const {
         roles,
@@ -122,6 +118,7 @@ export default function CreateProduction({
             lookingFor: production?.lookingFor,
             pitchLink: production?.pitchLink,
             userId: production?.userId ?? user.id,
+            creationCode: "",
         },
     });
 
@@ -227,6 +224,34 @@ export default function CreateProduction({
                                 </FormItem>
                             )}
                         />
+                        {!isEdit && (
+                            <FormField
+                                control={form.control}
+                                name="creationCode"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            <span className="flex w-full items-center justify-between">
+                                                Production creation code
+                                            </span>
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                className="w-full"
+                                                placeholder="Enter creation code"
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Enter the production creation code
+                                            for this quarter. This can be
+                                            retrieved from a LUX officer.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        )}
                     </FormCard>
                     <FormCard
                         title="About the Production"
@@ -338,6 +363,11 @@ export default function CreateProduction({
                             isLoading={isEditPending || isCreatePending}
                             className="w-fit"
                             type="submit"
+                            disabled={
+                                typeof isProductionCreationAvailable !==
+                                    "undefined" &&
+                                !isProductionCreationAvailable
+                            }
                         >
                             Submit
                         </LoaderButton>

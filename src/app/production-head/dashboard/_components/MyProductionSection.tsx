@@ -6,6 +6,7 @@ import {
 } from "@/components/candidates-table/columns";
 import ProductionInfoCard from "@/components/ProductionInfoCard";
 import SectionHeading from "@/components/SectionHeading";
+import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { CandidateRow } from "@/data/candidates";
@@ -20,6 +21,7 @@ interface MyProductionSectionProps {
     candidates: CandidateRow[];
     director: string | undefined;
     user: User;
+    isProductionCreationAvailable: boolean;
 }
 
 export default function MyProductionSection(props: MyProductionSectionProps) {
@@ -33,17 +35,20 @@ export default function MyProductionSection(props: MyProductionSectionProps) {
         <div className="w-full flex flex-col gap-2 pb-6 md:justify-center items-center">
             <div className="w-full flex justify-between items-center">
                 <SectionHeading title="My Production" />
-                {!props.production && (
-                    <Link
-                        href="/production/create"
-                        className={cn(
-                            buttonVariants({ variant: "default" }),
-                            "w-fit"
-                        )}
-                    >
-                        Create Production
-                    </Link>
-                )}
+                {!props.production &&
+                    (props.isProductionCreationAvailable ? (
+                        <Link
+                            href="/production/create"
+                            className={cn(
+                                buttonVariants({ variant: "default" }),
+                                "w-fit"
+                            )}
+                        >
+                            Create Production
+                        </Link>
+                    ) : (
+                        <Badge className="text-md">Creation Unavailable</Badge>
+                    ))}
             </div>
             {props.production ? (
                 <>

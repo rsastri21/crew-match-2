@@ -13,6 +13,7 @@ export interface ProductionHeadDashboardClientProps {
     productions: ProductionWithRoles[];
     candidates: CandidateRow[];
     directors: string[];
+    isProductionCreationAvailable: boolean;
 }
 
 export default function ProductionHeadDashboardClient(
@@ -56,6 +57,9 @@ export default function ProductionHeadDashboardClient(
                         director={director}
                         candidates={props.candidates}
                         user={user}
+                        isProductionCreationAvailable={
+                            props.isProductionCreationAvailable
+                        }
                     />
                 </TabsContent>
                 <TabsContent className="w-full" value="productions">

@@ -8,6 +8,7 @@ import {
 import { getUserCandidateProfile } from "@/utils/users";
 import { transformCandidatesToRowModel } from "@/utils/candidates";
 import { getAllCandidates } from "@/data/candidates";
+import { getProductionCreationStatus } from "@/data/configs";
 
 export default async function ProductionHeadDashboard() {
     const user = await getCurrentUser();
@@ -27,12 +28,15 @@ export default async function ProductionHeadDashboard() {
     const candidates = await getAllCandidates();
     const rowCandidates = transformCandidatesToRowModel(candidates);
 
+    const isProductionCreationAvailable = await getProductionCreationStatus();
+
     return (
         <ProductionHeadDashboardClient
             user={userInfo}
             productions={productionsWithRoles}
             candidates={rowCandidates}
             directors={directors}
+            isProductionCreationAvailable={isProductionCreationAvailable}
         />
     );
 }

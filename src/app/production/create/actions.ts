@@ -1,5 +1,6 @@
 "use server";
 
+import { validateSessionCode } from "@/data/configs";
 import { authenticatedAction } from "@/lib/safe-action";
 import {
     createProductionWithDefaultRoles,
@@ -19,9 +20,19 @@ export const createProductionAction = authenticatedAction
             lookingFor: z.string(),
             pitchLink: z.string(),
             userId: z.string(),
+            creationCode: z.string().min(6).max(6),
         })
     )
     .handler(async ({ input }) => {
+        const isValidCode = await validateSessionCode(
+            "production",
+            input.creationCode
+        );
+
+        if (!isValidCode) {
+            throw new Error("Production creation code is invalid.");
+        }
+
         const production = await createProductionWithDefaultRoles(
             input.name,
             input.genre,
@@ -48,6 +59,7 @@ export const editProductionAction = authenticatedAction
             userId: z.string(),
             rolesToCreate: z.string().array(),
             rolesToDelete: z.number().array(),
+            creationCode: z.string().length(0),
         })
     )
     .handler(async ({ input }) => {
