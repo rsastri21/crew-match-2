@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import CandidateRegistration from "./_components/CandidateRegistration.client";
 import { getCandidateRegistrationStatus } from "@/data/configs";
 import { Badge } from "@/components/ui/badge";
+import { getAllProductions } from "@/data/productions";
 
 const testProductions: string[] = ["Pink Robots", "Dead Serious", "The Grudge"];
 
@@ -16,6 +17,9 @@ export default async function CandidateRegistrationPage() {
 
     const userInfo = await getUserCandidateProfile(user.id);
     const isRegistrationOpen = await getCandidateRegistrationStatus();
+
+    const productions = await getAllProductions();
+    const productionNames = productions.map((production) => production.name);
 
     return (
         <div className="container py-2 flex flex-col gap-2 items-center mx-auto">
@@ -33,7 +37,7 @@ export default async function CandidateRegistrationPage() {
             </div>
             <CandidateRegistration
                 userInfo={userInfo}
-                productions={testProductions}
+                productions={productionNames}
                 isRegistrationOpen={isRegistrationOpen}
             />
         </div>

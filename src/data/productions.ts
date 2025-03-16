@@ -129,6 +129,10 @@ export async function getProductionCount() {
     return db.select({ count: count() }).from(productions);
 }
 
+export async function getAllProductions() {
+    return db.query.productions.findMany();
+}
+
 export async function deleteProduction(productionId: number) {
     await db.delete(productions).where(eq(productions.id, productionId));
 }
