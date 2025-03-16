@@ -8,6 +8,7 @@ import {
     updateProduction,
 } from "@/data/productions";
 import {
+    batchUpdateRoles,
     createRoles,
     deleteRole,
     getProductionDirectorName,
@@ -16,12 +17,14 @@ import {
 import {
     Production,
     ProductionWithRoles,
+    Role,
     RoleWithCandidateName,
     User,
 } from "@/db/schema";
 import { cache } from "react";
 import { getAmountFilled } from "./productionClientUtils";
 import { getUserProfile } from "./users";
+import { Roles } from "./types";
 
 export async function transformProductionsToRowModel(
     productions: (Production & { roles: RoleWithCandidateName[] })[]
@@ -95,7 +98,8 @@ export async function editProduction(
     productionId: number,
     updatedProduction: Partial<Production>,
     rolesToCreate: string[],
-    rolesToDelete: number[]
+    rolesToDelete: number[],
+    rolesToEdit: Roles[]
 ) {
     const editedProduction = await updateProduction(
         productionId,
@@ -116,6 +120,18 @@ export async function editProduction(
     await Promise.all(
         rolesToDelete.map((roleToDelete: number) => deleteRole(roleToDelete))
     );
+
+    const rolesToUpdate: Role[] = rolesToEdit.map((role) => {
+        return {
+            id: role.id!,
+            role: role.role,
+            production: role.production,
+            productionId: role.productionId,
+            candidateId: role.candidateId,
+        };
+    });
+
+    await batchUpdateRoles(rolesToUpdate);
 
     return editedProduction;
 }

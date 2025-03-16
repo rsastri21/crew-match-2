@@ -3,17 +3,19 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Roles } from "@/hooks/use-modify-production";
+import { Roles } from "@/utils/types";
 import { CircleMinus } from "lucide-react";
 
 interface RolesListComponentProps {
     roles: Roles[];
     removeRole: (role: Roles, index: number) => void;
+    dropCandidate: (index: number) => void;
 }
 
 export default function RolesListComponent({
     roles,
     removeRole,
+    dropCandidate,
 }: RolesListComponentProps) {
     return (
         <section className="flex flex-col gap-4 max-h-[50dvh] overflow-y-scroll">
@@ -29,6 +31,16 @@ export default function RolesListComponent({
                             ) : null}
                         </section>
                         <section className="w-full md:w-fit h-full space-x-2 flex items-center">
+                            {role.candidateId && (
+                                <Button
+                                    variant="outline"
+                                    type="button"
+                                    className="w-full"
+                                    onClick={() => dropCandidate(index)}
+                                >
+                                    <CircleMinus /> Drop
+                                </Button>
+                            )}
                             <Button
                                 variant="outline"
                                 type="button"

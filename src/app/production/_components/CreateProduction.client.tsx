@@ -68,6 +68,7 @@ export default function CreateProduction({
         roles,
         handleAddRole,
         handleRemoveRole,
+        handleDropCandidate,
         getSubmissionExpectations,
         reset,
     } = useModifyProduction(production);
@@ -129,6 +130,7 @@ export default function CreateProduction({
                 ...values,
                 rolesToCreate: submissionExpectations.create,
                 rolesToDelete: submissionExpectations.delete,
+                rolesToEdit: submissionExpectations.edit,
                 productionId: production!.id,
             });
         } else {
@@ -324,11 +326,12 @@ export default function CreateProduction({
                     {isEdit && (
                         <FormCard
                             title="Roles"
-                            description="Edit the roles on your production. Deleting a role populated with a member will remove them from your production and return them to the assignment pool."
+                            description="Edit the roles on your production. Removing a role populated with a member will remove them from your production and return them to the assignment pool while deleting the role. The drop option removes the candidate and keeps the role on your production."
                         >
                             <RolesListComponent
                                 roles={roles}
                                 removeRole={handleRemoveRole}
+                                dropCandidate={handleDropCandidate}
                             />
                             <Separator />
                             <AddRoleComponent

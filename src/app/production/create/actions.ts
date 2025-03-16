@@ -59,18 +59,39 @@ export const editProductionAction = authenticatedAction
             userId: z.string(),
             rolesToCreate: z.string().array(),
             rolesToDelete: z.number().array(),
+            rolesToEdit: z
+                .object({
+                    id: z.number().optional(),
+                    role: z.string(),
+                    production: z.string(),
+                    productionId: z.number(),
+                    candidateId: z.number().nullable(),
+                    candidate: z
+                        .object({
+                            name: z.string(),
+                        })
+                        .nullable(),
+                })
+                .array(),
             creationCode: z.string().length(0),
         })
     )
     .handler(async ({ input }) => {
-        const { rolesToCreate, rolesToDelete, productionId, ...production } =
-            input;
+        const {
+            rolesToCreate,
+            rolesToDelete,
+            rolesToEdit,
+            productionId,
+            creationCode,
+            ...production
+        } = input;
 
         const editedProduction = await editProduction(
             productionId,
             { ...production, updatedAt: new Date() },
             rolesToCreate,
-            rolesToDelete
+            rolesToDelete,
+            rolesToEdit
         );
         redirect(`/production/${productionId}/view`);
     });

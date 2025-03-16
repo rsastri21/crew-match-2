@@ -1,8 +1,6 @@
-import type { ProductionWithRoles, RoleWithCandidateName } from "@/db/schema";
-import { PartialBy } from "@/utils/types";
+import type { ProductionWithRoles } from "@/db/schema";
+import { Roles } from "@/utils/types";
 import { useState } from "react";
-
-export type Roles = PartialBy<RoleWithCandidateName, "id">;
 
 /**
  * Utility function that gets the difference between two arrays depending on the provided
