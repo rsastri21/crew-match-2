@@ -49,7 +49,28 @@ export const deleteCandidateAction = authenticatedAction
 export const assignCandidateAction = authenticatedAction
     .createServerAction()
     .input(assignCandidateSchema)
-    .handler(async ({ input }) => {
+    .handler(async ({ input, ctx }) => {
+        const user = ctx.user;
+
+        /**
+         * If the user is a production head and not an admin,
+         * validate that they are trying to assign a candidate
+         * to their own production.
+         */
+        if (!user.isAdmin && user.role === "production_head") {
+            const roleObj = await getRoleById(input.roleId);
+            if (!roleObj) {
+                throw new Error("Role does not exist.");
+            }
+
+            const production = await getProductionById(roleObj.productionId);
+            if (!production || production.userId !== user.id) {
+                throw new Error(
+                    "Cannot assign candidate to another production."
+                );
+            }
+        }
+
         await updateRole(input.roleId, { candidateId: input.id });
         revalidatePath("/admin/candidates");
     });
