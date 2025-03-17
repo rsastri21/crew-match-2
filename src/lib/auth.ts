@@ -54,10 +54,15 @@ export const validateSessionToken = async (
         where: eq(sessions.id, sessionId),
     });
 
+    console.log({ token });
+    console.log({ id: sessionInDb?.id });
+
     if (!sessionInDb) {
         return { session: null, user: null };
     }
 
+    console.log("Date.now()", Date.now());
+    console.log("DB date time", sessionInDb.expiresAt.getTime());
     // Invalidate session if it is expired
     if (Date.now() >= sessionInDb.expiresAt.getTime()) {
         await invalidateSession(sessionId);
