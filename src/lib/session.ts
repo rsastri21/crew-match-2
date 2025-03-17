@@ -1,6 +1,5 @@
 import "server-only";
 import "dotenv";
-import { cache } from "react";
 import { createSession, generateSessionToken, validateRequest } from "./auth";
 import { AuthenticationError } from "@/utils/errors";
 import { cookies } from "next/headers";
@@ -31,10 +30,10 @@ export const getSessionToken = (): string | undefined => {
     return cookies().get(SESSION_COOKIE_NAME)?.value;
 };
 
-export const getCurrentUser = cache(async () => {
+export const getCurrentUser = async () => {
     const { user } = await validateRequest();
     return user ?? undefined;
-});
+};
 
 export const assertAuthenticated = async () => {
     const user = await getCurrentUser();
