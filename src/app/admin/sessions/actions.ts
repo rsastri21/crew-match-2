@@ -1,10 +1,12 @@
 "use server";
 
+import { deleteAllCandidates } from "@/data/candidates";
 import {
     createNewSession,
     updateCandidateRegistrationStatus,
     updateProductionCreationStatus,
 } from "@/data/configs";
+import { deleteAllProductions } from "@/data/productions";
 import { authenticatedAction } from "@/lib/safe-action";
 import { AdminError } from "@/utils/errors";
 import { revalidatePath } from "next/cache";
@@ -55,7 +57,8 @@ export const newSessionAction = authenticatedAction
             throw new AdminError();
         }
 
-        // TODO: Need to also delete candidates, roles, and productions here
+        await deleteAllCandidates();
+        await deleteAllProductions();
         await createNewSession();
         revalidatePath("/");
     });

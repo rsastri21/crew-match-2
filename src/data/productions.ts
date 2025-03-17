@@ -136,3 +136,7 @@ export async function getAllProductions() {
 export async function deleteProduction(productionId: number) {
     await db.delete(productions).where(eq(productions.id, productionId));
 }
+
+export async function deleteAllProductions() {
+    await db.delete(productions);
+}

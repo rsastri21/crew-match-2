@@ -138,3 +138,7 @@ export async function getCandidateCount() {
 export async function deleteCandidate(candidateId: number) {
     await db.delete(candidates).where(eq(candidates.id, candidateId));
 }
+
+export async function deleteAllCandidates() {
+    await db.delete(candidates);
+}
