@@ -86,6 +86,7 @@ export default function ProfileDropdownClient({
                         <Link
                             className="flex items-center"
                             href={"/api/sign-out"}
+                            prefetch={false}
                         >
                             <LogOut className="w-4 h-4 mr-2" />
                             Sign Out
