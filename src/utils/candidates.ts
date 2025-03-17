@@ -10,6 +10,23 @@ import {
 import { Candidate, Role } from "@/db/schema";
 import { cache } from "react";
 
+export async function quickRegisterCandidate(
+    name: string,
+    userId: string | null,
+    isActing: boolean,
+    prioritizeProductions: boolean
+) {
+    const existingCandidate = await getCandidateByName(name);
+
+    if (existingCandidate) {
+        throw new Error(
+            "Candidate already exists. Select from the table instead."
+        );
+    }
+
+    return await createCandidate(name, userId, isActing, prioritizeProductions);
+}
+
 export async function registerCandidate(
     name: string,
     userId: string | null,
@@ -23,7 +40,7 @@ export async function registerCandidate(
     const existingCandidate = await getCandidateByName(name);
 
     if (!existingCandidate) {
-        await createCandidate(
+        return await createCandidate(
             name,
             userId,
             isActing,
@@ -34,7 +51,7 @@ export async function registerCandidate(
             interestedRoles
         );
     } else {
-        await updateCandidate(existingCandidate.id, {
+        return await updateCandidate(existingCandidate.id, {
             name,
             userId,
             isActing,

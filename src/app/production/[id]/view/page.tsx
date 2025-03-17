@@ -1,3 +1,4 @@
+import CandidateQuickCreate from "@/components/candidate-quick-add/CandidateQuickCreate";
 import {
     candidateFilters,
     candidateTableColumnFactory,
@@ -127,6 +128,7 @@ export default async function ViewProductionPage({
                             filters={candidateFilters}
                         />
                     </section>
+                    <CandidateQuickCreate roles={production.roles} />
                 </div>
             )}
         </div>
