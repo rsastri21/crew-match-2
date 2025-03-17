@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Role } from "@/db/schema";
 import SectionHeading from "../../../../components/SectionHeading";
 import SectionRow from "../../../../components/SectionRow";
+import Link from "next/link";
 
 export default function AssignmentsSection({
     assignments,
@@ -32,9 +33,12 @@ function AssignmentCard(assignment: Role) {
                 <p className="md:text-2xl text-lg font-semibold bg-emerald-100 dark:bg-emerald-800 p-2 w-fit h-fit rounded-lg">
                     {assignment.role}
                 </p>
-                <p className="text-xs font-light text-muted-foreground w-fit h-fit">
+                <Link
+                    className="text-xs font-light text-muted-foreground w-fit h-fit"
+                    href={`/production/${assignment.productionId}/view`}
+                >
                     Click to view this production&apos;s page
-                </p>
+                </Link>
             </CardContent>
         </Card>
     );
