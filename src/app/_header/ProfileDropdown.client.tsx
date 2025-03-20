@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/sheet";
 import { Profile, User } from "@/db/schema";
 import { getDashboardUrl } from "@/utils/redirects";
-import { House, LogOut, SquarePen, UserPen } from "lucide-react";
+import { Film, House, LogOut, SquarePen, UserPen } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import ProfileHeader from "./ProfileHeader";
@@ -67,12 +67,23 @@ export default function ProfileDropdownClient({
                     <DropdownMenuItem asChild className="cursor-pointer">
                         <Link
                             className="flex items-center"
-                            href={getDashboardUrl(user.role)}
+                            href={getDashboardUrl("user")}
                         >
                             <House className="w-4 h-4 mr-2" />
                             Dashboard
                         </Link>
                     </DropdownMenuItem>
+                    {user.role === "production_head" ? (
+                        <DropdownMenuItem asChild className="cursor-pointer">
+                            <Link
+                                className="flex items-center"
+                                href={getDashboardUrl("production_head")}
+                            >
+                                <Film className="w-4 h-4 mr-2" />
+                                Productions
+                            </Link>
+                        </DropdownMenuItem>
+                    ) : null}
                     <DropdownMenuItem asChild className="cursor-pointer">
                         <Link
                             className="flex items-center"

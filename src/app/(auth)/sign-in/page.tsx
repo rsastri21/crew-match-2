@@ -33,6 +33,7 @@ export default function SignInPage() {
                                 buttonVariants({ variant: "default" }),
                                 "w-full"
                             )}
+                            prefetch={false}
                         >
                             <GoogleIcon className="mr-2 h-5 w-5 invert dark:invert-0" />
                             Sign in with Google
@@ -43,6 +44,7 @@ export default function SignInPage() {
                                 buttonVariants({ variant: "default" }),
                                 "w-full"
                             )}
+                            prefetch={false}
                         >
                             <SlackIcon className="mr-2 h-5 w-5 invert dark:invert-0" />
                             Sign in with Slack
