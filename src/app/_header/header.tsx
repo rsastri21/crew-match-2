@@ -8,6 +8,7 @@ import { Loader2Icon } from "lucide-react";
 import { User } from "@/db/schema";
 import ProfileDropdownClient from "./ProfileDropdown.client";
 import { AdminButton } from "./admin-button";
+import { DocsButton } from "./docs-button";
 
 const profileLoader = cache(getUserProfile);
 
@@ -19,7 +20,7 @@ export async function Header() {
                     <Button variant="ghost">
                         <Link
                             href="/"
-                            className="flex gap-2 items-center text-2xl font-semibold"
+                            className="flex gap-2 items-center text-xl md:text-2xl font-semibold"
                         >
                             Crew Match
                         </Link>
@@ -54,7 +55,8 @@ async function HeaderActions() {
         <>
             {isSignedIn ? (
                 <div className="flex items-center justify-start gap-4">
-                    <div className="flex items-center justify-between gap-1">
+                    <div className="flex items-center justify-between gap-0.5 md:gap-1">
+                        <DocsButton />
                         <AdminButton />
                         <ModeToggle />
                     </div>
@@ -62,6 +64,7 @@ async function HeaderActions() {
                 </div>
             ) : (
                 <>
+                    <DocsButton />
                     <ModeToggle />
                     <Button asChild variant="default">
                         <Link href="/sign-in">Sign In</Link>

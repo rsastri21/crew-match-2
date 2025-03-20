@@ -9,11 +9,10 @@ import {
     SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
     SidebarRail,
 } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
+import { cn, generateSidebarLinks } from "@/lib/utils";
+import { SideBarItem } from "@/utils/types";
 import {
     BookUser,
     CalendarCog,
@@ -23,12 +22,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-type SideBarItem = {
-    url: string;
-    title: string;
-    icon: any;
-};
 
 const ADMIN_HOME_ITEM: SideBarItem = {
     url: "/admin",
@@ -61,27 +54,6 @@ const MORE_TOOLS_ITEMS: SideBarItem[] = [
         icon: CalendarCog,
     },
 ];
-
-function generateSidebarLinks(items: SideBarItem[], pathname: string) {
-    return items.map((item) => (
-        <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild isActive={item.url === pathname}>
-                <Link
-                    href={item.url}
-                    className={cn(
-                        buttonVariants({
-                            variant: "ghost",
-                        }),
-                        "w-full items-center justify-start"
-                    )}
-                >
-                    <item.icon className="w-4 h-4" />
-                    <span>{item.title}</span>
-                </Link>
-            </SidebarMenuButton>
-        </SidebarMenuItem>
-    ));
-}
 
 export default function AdminSidebar() {
     const pathname = usePathname();
