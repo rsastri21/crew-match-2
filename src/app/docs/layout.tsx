@@ -9,7 +9,7 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
                 <DocsSidebar />
                 <section className="container relative px-0 grow flex max-h-[calc(100vh-72px)] overflow-y-scroll">
                     <SidebarTrigger className="absolute top-2 left-2" />
-                    <section className="w-full max-w-[80ch] h-full mx-auto space-y-6">
+                    <section className="w-full max-w-[80ch] h-full mx-auto space-y-6 pb-12">
                         <div className="w-full h-full px-6">{children}</div>
                     </section>
                 </section>
