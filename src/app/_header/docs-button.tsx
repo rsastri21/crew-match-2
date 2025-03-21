@@ -12,7 +12,7 @@ import Link from "next/link";
 export function DocsButton() {
     return (
         <TooltipProvider>
-            <Tooltip>
+            <Tooltip delayDuration={200}>
                 <TooltipTrigger>
                     <Link
                         href="/docs"

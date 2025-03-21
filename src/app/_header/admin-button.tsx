@@ -19,7 +19,7 @@ export async function AdminButton() {
 
     return (
         <TooltipProvider>
-            <Tooltip>
+            <Tooltip delayDuration={200}>
                 <TooltipTrigger>
                     <Link
                         href="/admin"

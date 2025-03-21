@@ -29,6 +29,16 @@ export const profileEditAction = authenticatedAction
 
         const user = await getUserCandidateProfile(input.userId);
 
+        if (
+            user.production &&
+            user.role === "production_head" &&
+            input.role === "user"
+        ) {
+            throw new Error(
+                "Cannot change role while currently leading a production."
+            );
+        }
+
         if (user.candidate && user.candidate.name !== input.name) {
             await updateCandidate(user.candidate.id, { name: input.name });
         }

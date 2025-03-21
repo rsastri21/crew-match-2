@@ -14,7 +14,7 @@ interface FormHelpTipProps {
 export default function FormHelpTip({ children }: FormHelpTipProps) {
     return (
         <TooltipProvider>
-            <Tooltip>
+            <Tooltip delayDuration={200}>
                 <TooltipTrigger type="button">
                     <Info className="w-4 h-4 text-muted-foreground" />
                 </TooltipTrigger>

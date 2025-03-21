@@ -91,7 +91,7 @@ export default function RegistrationSection({
                 <div className="flex items-center">
                     <SectionHeading title="Registration Information" />
                     <TooltipProvider>
-                        <Tooltip>
+                        <Tooltip delayDuration={200}>
                             <TooltipTrigger>
                                 <Info className="w-4 h-4 text-muted-foreground" />
                             </TooltipTrigger>
