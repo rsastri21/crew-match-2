@@ -32,7 +32,7 @@ export default function RootLayout({
             >
                 <Providers>
                     <Header />
-                    <div className="max-h-[calc(100vh-72px)] overflow-y-scroll">
+                    <div className="max-h-[calc(100vh-72px)] overflow-y-scroll pb-12">
                         {children}
                     </div>
                 </Providers>

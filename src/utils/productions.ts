@@ -131,7 +131,9 @@ export async function editProduction(
         };
     });
 
-    await batchUpdateRoles(rolesToUpdate);
+    if (rolesToEdit.length) {
+        await batchUpdateRoles(rolesToUpdate);
+    }
 
     return editedProduction;
 }

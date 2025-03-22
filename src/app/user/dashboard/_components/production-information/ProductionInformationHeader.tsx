@@ -37,7 +37,7 @@ export default function ProductionInformationHeader(
                         "w-fit"
                     )}
                 >
-                    View pitch
+                    View script
                 </Link>
             </div>
         </CardHeader>

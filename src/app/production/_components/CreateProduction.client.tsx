@@ -208,19 +208,19 @@ export default function CreateProduction({
                                 <FormItem>
                                     <FormLabel>
                                         <span className="flex w-full items-center justify-between">
-                                            Pitch link
+                                            Script link
                                         </span>
                                     </FormLabel>
                                     <FormControl>
                                         <Input
                                             {...field}
                                             className="w-full"
-                                            placeholder="Enter the pitch URL"
+                                            placeholder="Enter the script URL"
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Provide a link to the Google slide used
-                                        for this production&apos;s pitch.
+                                        Provide a link to the script for this
+                                        production.
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>

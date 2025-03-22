@@ -80,7 +80,7 @@ export default async function ViewProductionPage({
                             "w-fit"
                         )}
                     >
-                        View pitch
+                        View script
                     </Link>
                     {isProductionLeader ? (
                         <Link
