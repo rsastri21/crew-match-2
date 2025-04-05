@@ -5,8 +5,8 @@ import CandidateRegistration from "./_components/CandidateRegistration.client";
 import { getCandidateRegistrationStatus } from "@/data/configs";
 import { Badge } from "@/components/ui/badge";
 import { getAllProductions } from "@/data/productions";
-
-const testProductions: string[] = ["Pink Robots", "Dead Serious", "The Grudge"];
+import { getAllRoles } from "@/data/roles";
+import { ROLES } from "@/data/constants";
 
 export default async function CandidateRegistrationPage() {
     const user = await getCurrentUser();
@@ -20,6 +20,11 @@ export default async function CandidateRegistrationPage() {
 
     const productions = await getAllProductions();
     const productionNames = productions.map((production) => production.name);
+
+    const roles = await getAllRoles();
+    const roleNames = Array.from(
+        new Set([...ROLES, ...roles.map((role) => role.role)])
+    ).toSorted();
 
     return (
         <div className="container py-2 flex flex-col gap-2 items-center mx-auto">
@@ -38,6 +43,7 @@ export default async function CandidateRegistrationPage() {
             <CandidateRegistration
                 userInfo={userInfo}
                 productions={productionNames}
+                roles={roleNames}
                 isRegistrationOpen={isRegistrationOpen}
             />
         </div>

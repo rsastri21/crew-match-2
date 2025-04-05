@@ -58,6 +58,11 @@ export async function batchUpdateRoles(rolesToInsert: Role[]) {
     return insertedRoles;
 }
 
+export async function getAllRoles() {
+    const roles = await db.query.roles.findMany();
+    return roles;
+}
+
 export async function getRolesByProduction(productionId: number) {
     const productionRoles = await db.query.roles.findMany({
         where: eq(roles.productionId, productionId),

@@ -50,10 +50,12 @@ const candidateSchema = z.object({
 export default function CandidateRegistration({
     userInfo,
     productions,
+    roles,
     isRegistrationOpen,
 }: {
     userInfo: UserWithCandidateProfile;
     productions: string[];
+    roles: string[];
     isRegistrationOpen: boolean;
 }) {
     const { toast } = useToast();
@@ -65,7 +67,7 @@ export default function CandidateRegistration({
         userInfo.candidate?.interestedRoles ?? []
     );
     const [selectedRoles, setSelectedRoles] = useState<boolean[]>(
-        ROLES.map((role) => interestedRoles.includes(role))
+        roles.map((role) => interestedRoles.includes(role))
     );
 
     const controls = useDragControls();
@@ -108,7 +110,7 @@ export default function CandidateRegistration({
     function handleRoleCheckboxChange(index: number, checked: boolean) {
         const newSelectedRoles: boolean[] = [...selectedRoles];
         newSelectedRoles[index] = checked;
-        setInterestedRoles(ROLES.filter((role, i) => newSelectedRoles[i]));
+        setInterestedRoles(roles.filter((role, i) => newSelectedRoles[i]));
         setSelectedRoles(newSelectedRoles);
     }
 
@@ -321,7 +323,7 @@ export default function CandidateRegistration({
                             description="Select 3 roles you would be interested in performing. Then, rank the roles in order of preference."
                         >
                             <ul className="flex flex-col gap-4 rounded-lg border p-4 bg-background">
-                                {ROLES.map((ROLE, index) => (
+                                {roles.map((ROLE, index) => (
                                     <div
                                         key={ROLE}
                                         className="flex flex-row items-center justify-between"
