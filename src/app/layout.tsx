@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Header } from "./_header/header";
 import { Providers } from "./_providers/providers";
 import { Toaster } from "@/components/ui/toaster";
+import Footer from "./_footer/footer";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
                     <Header />
                     <div className="max-h-[calc(100vh-72px)] overflow-y-scroll pb-12">
                         {children}
+                        <Footer />
                     </div>
                 </Providers>
                 <Toaster />
