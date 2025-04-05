@@ -91,14 +91,14 @@ export default function DocsSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-                <SidebarGroup>
+                {/* <SidebarGroup>
                     <SidebarGroupLabel>Roles</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {generateSidebarLinks(DOCS_ROLES, pathname)}
                         </SidebarMenu>
                     </SidebarGroupContent>
-                </SidebarGroup>
+                </SidebarGroup> */}
             </SidebarContent>
             <SidebarFooter>
                 <SidebarGroup>

@@ -11,6 +11,8 @@ import AssignmentsSection from "./AssignmentsSection";
 import RegistrationSection from "./RegistrationSection";
 import ProductionsSection from "../../../../components/ProductionsSection";
 import TopHeading from "../../../../components/TopHeading";
+import { useEffect } from "react";
+import posthog from "posthog-js";
 
 export interface UserDashboardClientProps {
     user: UserWithCandidateProfile;
@@ -21,6 +23,13 @@ export interface UserDashboardClientProps {
 }
 
 export default function UserDashboardClient(props: UserDashboardClientProps) {
+    useEffect(() => {
+        posthog.identify(props.user.id, {
+            name: props.user.profile?.name,
+            role: props.user.role,
+        });
+    }, [props.user]);
+
     return (
         <Tabs defaultValue="profile">
             <div className="container py-2 flex flex-col gap-2 min-h-[80dvh] items-center mx-auto">

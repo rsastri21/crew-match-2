@@ -6,6 +6,7 @@ const nextConfig = {
     experimental: {
         missingSuspenseWithCSRBailout: false,
     },
+    skipTrailingSlashRedirect: true,
 };
 
 const withMDX = createMDX({});

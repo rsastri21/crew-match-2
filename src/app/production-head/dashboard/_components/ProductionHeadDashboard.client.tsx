@@ -7,6 +7,8 @@ import { ProductionWithRoles, UserWithCandidateProfile } from "@/db/schema";
 import MyProductionSection from "./MyProductionSection";
 import ProductionsSection from "@/components/ProductionsSection";
 import { CandidateRow } from "@/data/candidates";
+import { useEffect } from "react";
+import posthog from "posthog-js";
 
 export interface ProductionHeadDashboardClientProps {
     user: UserWithCandidateProfile;
@@ -30,6 +32,10 @@ export default function ProductionHeadDashboardClient(
         profile,
         ...user
     } = props.user;
+
+    useEffect(() => {
+        posthog.identify(user.id, { name: profile?.name, role: user.role });
+    }, [props.user]);
 
     return (
         <Tabs defaultValue="profile">
