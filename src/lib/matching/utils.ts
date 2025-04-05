@@ -10,7 +10,14 @@ export const transformProductionsToMatchInput = (
         matchInput[production.name] = {};
 
         production.roles.forEach((role: Role) => {
-            matchInput[production.name][role.role] = role;
+            if (matchInput[production.name][role.role]) {
+                matchInput[production.name][role.role] = [
+                    ...matchInput[production.name][role.role],
+                    role,
+                ];
+            } else {
+                matchInput[production.name][role.role] = [role];
+            }
         });
     }
 

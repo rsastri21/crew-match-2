@@ -36,20 +36,33 @@ export class MatchService {
 
         for (const interestedProduction of interestedProductions) {
             for (const interestedRole of interestedRoles) {
-                const role =
+                const roles =
                     this.productions[interestedProduction]?.[interestedRole];
 
-                if (!role) continue;
+                console.log("REACHED: ", candidate.name);
+                console.log("TRYING:", roles);
+                if (!roles || roles.length === 0) continue;
 
                 /**
                  * If role is available, return the updated role object
                  * and remove it from the productions object.
                  */
+                const role = roles[0];
                 const updatedRole: Role = {
                     ...role,
                     candidateId: candidate.id,
                 };
-                delete this.productions[interestedProduction][interestedRole];
+                if (roles.length > 1) {
+                    // If there are multiple roles with the same name,
+                    // assign to the first one and remove it from the array.
+                    this.productions[interestedProduction][
+                        interestedRole
+                    ].shift();
+                } else {
+                    delete this.productions[interestedProduction][
+                        interestedRole
+                    ];
+                }
                 return updatedRole;
             }
         }
@@ -63,20 +76,32 @@ export class MatchService {
 
         for (const interestedRole of interestedRoles) {
             for (const interestedProduction of interestedProductions) {
-                const role =
+                const roles =
                     this.productions[interestedProduction]?.[interestedRole];
-
-                if (!role) continue;
+                console.log("REACHED: ", candidate.name);
+                console.log("TRYING:", roles);
+                if (!roles || roles.length === 0) continue;
 
                 /**
-                 * If the role is available, return the updated role object
+                 * If role is available, return the updated role object
                  * and remove it from the productions object.
                  */
+                const role = roles[0];
                 const updatedRole: Role = {
                     ...role,
                     candidateId: candidate.id,
                 };
-                delete this.productions[interestedProduction][interestedRole];
+                if (roles.length > 1) {
+                    // If there are multiple roles with the same name,
+                    // assign to the first one and remove it from the array.
+                    this.productions[interestedProduction][
+                        interestedRole
+                    ].shift();
+                } else {
+                    delete this.productions[interestedProduction][
+                        interestedRole
+                    ];
+                }
                 return updatedRole;
             }
         }
@@ -134,9 +159,11 @@ export class MatchService {
             };
         }
 
-        while (candidatesRemaining.length > 0 && remainingRoles.length > 0) {
+        const flattenedRoles = remainingRoles.flat();
+
+        while (candidatesRemaining.length > 0 && flattenedRoles.length > 0) {
             const candidate = candidatesRemaining.shift()!;
-            const role = remainingRoles.shift()!;
+            const role = flattenedRoles.shift()!;
 
             const updatedRole: Role = {
                 ...role,
