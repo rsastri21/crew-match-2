@@ -278,7 +278,7 @@ export default function CandidateRegistration({
                                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                                         <div className="space-y-0.5">
                                             <FormLabel className="text-base">
-                                                Priotize productions
+                                                Prioritize productions
                                             </FormLabel>
                                             <FormDescription>
                                                 Prefer productions over roles
