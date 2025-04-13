@@ -37,7 +37,8 @@ export default async function CandidateRegistrationPage() {
                 <h1 className="text-3xl font-bold">Register</h1>
                 <p className="text-lg font-medium text-muted-foreground">
                     Enter or modify your registration information for the
-                    upcoming quarter.
+                    upcoming quarter. Your changes will be saved for two days,
+                    so you may leave this page and continue registering later.
                 </p>
             </div>
             <CandidateRegistration

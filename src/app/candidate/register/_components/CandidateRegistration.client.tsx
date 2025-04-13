@@ -5,8 +5,6 @@ import { UserWithCandidateProfile } from "@/db/schema";
 import { z } from "zod";
 import { useServerAction } from "zsa-react";
 import { createCandidateAction } from "../actions";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Form,
     FormControl,
@@ -21,17 +19,16 @@ import { Input } from "@/components/ui/input";
 
 import FormHelpTip from "../../../../components/FormHelpTip";
 import { Switch } from "@/components/ui/switch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDragControls } from "framer-motion";
-import { ROLES } from "@/data/constants";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RankItem, RankSection } from "./ReorderComponents";
 import { LoaderButton } from "@/components/loader-button";
 import { Card } from "@/components/ui/card";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { usePersistForm } from "@/hooks/use-persist-form";
+import { useRouter } from "next/navigation";
 
 const candidateSchema = z.object({
     name: z.string(),
@@ -59,16 +56,7 @@ export default function CandidateRegistration({
     isRegistrationOpen: boolean;
 }) {
     const { toast } = useToast();
-
-    const [interestedProductions, setInterestedProductions] = useState<
-        string[]
-    >(userInfo.candidate?.interestedProductions ?? productions);
-    const [interestedRoles, setInterestedRoles] = useState<string[]>(
-        userInfo.candidate?.interestedRoles ?? []
-    );
-    const [selectedRoles, setSelectedRoles] = useState<boolean[]>(
-        roles.map((role) => interestedRoles.includes(role))
-    );
+    const router = useRouter();
 
     const controls = useDragControls();
 
@@ -91,8 +79,15 @@ export default function CandidateRegistration({
         }
     );
 
-    const form = useForm<z.infer<typeof candidateSchema>>({
-        resolver: zodResolver(candidateSchema),
+    const {
+        form,
+        lastPersistedTimestamp,
+        extraState,
+        setExtraState,
+        clearLocalState,
+    } = usePersistForm({
+        schema: candidateSchema,
+        storageKey: "cm_candidate_registration_form_data",
         defaultValues: {
             name: userInfo.profile!.name!,
             userId: userInfo.id,
@@ -103,19 +98,49 @@ export default function CandidateRegistration({
             prioritizeProductions:
                 userInfo.candidate?.prioritizeProductions || true,
         },
+        defaultExtraState: {
+            interestedProductions:
+                userInfo.candidate?.interestedProductions ?? productions,
+            interestedRoles: userInfo.candidate?.interestedRoles ?? [],
+        },
     });
+
+    const [selectedRoles, setSelectedRoles] = useState<boolean[]>([]);
+
+    useEffect(() => {
+        setSelectedRoles(
+            roles.map((role) => extraState.interestedRoles.includes(role))
+        );
+    }, [extraState.interestedRoles]);
 
     const watchIsActing = form.watch("isActing");
 
     function handleRoleCheckboxChange(index: number, checked: boolean) {
         const newSelectedRoles: boolean[] = [...selectedRoles];
         newSelectedRoles[index] = checked;
-        setInterestedRoles(roles.filter((role, i) => newSelectedRoles[i]));
+        setExtraState((prev) => ({
+            interestedProductions: prev.interestedProductions,
+            interestedRoles: roles.filter((_, i) => newSelectedRoles[i]),
+        }));
         setSelectedRoles(newSelectedRoles);
     }
 
+    function handleProductionsReorder(newOrder: string[]) {
+        setExtraState((prev) => ({
+            interestedRoles: prev.interestedRoles,
+            interestedProductions: newOrder,
+        }));
+    }
+
+    function handleRolesReorder(newOrder: string[]) {
+        setExtraState((prev) => ({
+            interestedRoles: newOrder,
+            interestedProductions: prev.interestedProductions,
+        }));
+    }
+
     function onSubmit(values: z.infer<typeof candidateSchema>) {
-        if (!watchIsActing && interestedRoles.length !== 3) {
+        if (!watchIsActing && extraState.interestedRoles.length !== 3) {
             toast({
                 title: "Not enough roles selected",
                 description: "Please rank 3 roles.",
@@ -127,9 +152,10 @@ export default function CandidateRegistration({
             ...values,
             yearsInUW: parseInt(values.yearsInUW),
             quartersInLUX: parseInt(values.quartersInLUX),
-            interestedProductions,
-            interestedRoles: watchIsActing ? [] : interestedRoles,
+            interestedProductions: extraState.interestedProductions,
+            interestedRoles: watchIsActing ? [] : extraState.interestedRoles,
         });
+        clearLocalState();
     }
 
     return (
@@ -303,18 +329,20 @@ export default function CandidateRegistration({
                     >
                         <RankSection
                             axis="y"
-                            values={interestedProductions}
-                            onReorder={setInterestedProductions}
+                            values={extraState.interestedProductions}
+                            onReorder={handleProductionsReorder}
                         >
-                            {interestedProductions.map((item, index) => (
-                                <RankItem
-                                    key={item}
-                                    value={item}
-                                    rankNumber={index}
-                                    dragListener={true}
-                                    dragControls={controls}
-                                />
-                            ))}
+                            {extraState.interestedProductions.map(
+                                (item, index) => (
+                                    <RankItem
+                                        key={item}
+                                        value={item}
+                                        rankNumber={index}
+                                        dragListener={true}
+                                        dragControls={controls}
+                                    />
+                                )
+                            )}
                         </RankSection>
                     </FormCard>
                     {!watchIsActing && (
@@ -332,7 +360,8 @@ export default function CandidateRegistration({
                                             htmlFor={ROLE}
                                             className={`${
                                                 !selectedRoles[index] &&
-                                                interestedRoles.length >= 3
+                                                extraState.interestedRoles
+                                                    .length >= 3
                                                     ? "text-muted-foreground"
                                                     : "text-foreground"
                                             }`}
@@ -343,7 +372,8 @@ export default function CandidateRegistration({
                                             id={ROLE}
                                             disabled={
                                                 !selectedRoles[index] &&
-                                                interestedRoles.length >= 3
+                                                extraState.interestedRoles
+                                                    .length >= 3
                                             }
                                             checked={selectedRoles[index]}
                                             onCheckedChange={() =>
@@ -356,7 +386,7 @@ export default function CandidateRegistration({
                                     </div>
                                 ))}
                             </ul>
-                            {interestedRoles.length === 3 && (
+                            {extraState.interestedRoles.length === 3 && (
                                 <>
                                     <div>
                                         <h1 className="font-medium text-lg">
@@ -369,35 +399,45 @@ export default function CandidateRegistration({
                                     </div>
                                     <RankSection
                                         axis="y"
-                                        values={interestedRoles}
-                                        onReorder={setInterestedRoles}
+                                        values={extraState.interestedRoles}
+                                        onReorder={handleRolesReorder}
                                     >
-                                        {interestedRoles.map((item, index) => (
-                                            <RankItem
-                                                key={item}
-                                                value={item}
-                                                rankNumber={index}
-                                                dragListener={true}
-                                                dragControls={controls}
-                                            />
-                                        ))}
+                                        {extraState.interestedRoles.map(
+                                            (item, index) => (
+                                                <RankItem
+                                                    key={item}
+                                                    value={item}
+                                                    rankNumber={index}
+                                                    dragListener={true}
+                                                    dragControls={controls}
+                                                />
+                                            )
+                                        )}
                                     </RankSection>
                                 </>
                             )}
                         </FormCard>
                     )}
-                    <Card className="w-full md:w-3/4 mx-auto px-6 py-4 flex justify-center md:justify-end items-center gap-2">
-                        <Link
-                            href="/user/dashboard"
-                            className={cn(
-                                buttonVariants({
-                                    variant: "secondary",
-                                }),
-                                "w-fit"
-                            )}
+                    <Card className="w-full md:w-3/4 mx-auto px-6 py-4 flex flex-wrap justify-center md:justify-end items-center gap-2">
+                        {lastPersistedTimestamp && (
+                            <p className="font-medium text-muted-foreground">
+                                Last saved:{" "}
+                                {new Date(
+                                    lastPersistedTimestamp
+                                ).toLocaleString()}
+                            </p>
+                        )}
+                        <Button
+                            variant="secondary"
+                            type="button"
+                            className="w-fit"
+                            onClick={() => {
+                                clearLocalState();
+                                router.push("/user/dashboard");
+                            }}
                         >
                             Discard Changes
-                        </Link>
+                        </Button>
                         <LoaderButton
                             isLoading={isPending}
                             className="w-fit"

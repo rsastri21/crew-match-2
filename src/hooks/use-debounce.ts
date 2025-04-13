@@ -5,7 +5,9 @@ export function useDebounce<T>(value: T, delay = 500) {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            setDebouncedValue(value);
+            if (JSON.stringify(value) !== JSON.stringify(debouncedValue)) {
+                setDebouncedValue(value);
+            }
         }, delay);
 
         return () => clearTimeout(timeout);
