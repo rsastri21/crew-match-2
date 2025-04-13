@@ -4,11 +4,7 @@ import { AuroraBackground } from "@/components/ui/aurora-background";
 import { Profile } from "@/db/schema";
 import { motion } from "framer-motion";
 
-export default function HomePage({
-    profile,
-}: {
-    profile: Profile | undefined;
-}) {
+export default function HomePage({ profile }: { profile?: Profile }) {
     return (
         <AuroraBackground>
             <motion.div
