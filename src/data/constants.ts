@@ -65,7 +65,7 @@ export const CANDIDATE_PROPERTIES: Record<
         header: "",
     },
     [CANDIDATE_PROPERTY_KEYS.prioritizeProductions]: {
-        label: "Priotize Productions",
+        label: "Prioritize Productions",
         header: "",
     },
     [`${CANDIDATE_PROPERTY_KEYS.interestedProductions}-1`]: {
