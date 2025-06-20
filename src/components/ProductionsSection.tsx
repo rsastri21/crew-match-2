@@ -7,6 +7,7 @@ import { useState } from "react";
 import useWindowSize from "@/hooks/useWindowSize";
 import { useRouter } from "next/navigation";
 import { getAmountFilled } from "@/utils/productionClientUtils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function ProductionsSection({
     productions,
@@ -16,6 +17,7 @@ export default function ProductionsSection({
     directors: string[];
 }) {
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
+    const isMobile = useIsMobile();
     const { width: windowWidth } = useWindowSize();
     const router = useRouter();
     const isSmallFormatDisplay = windowWidth && windowWidth <= 768;
@@ -38,7 +40,11 @@ export default function ProductionsSection({
                     No productions to display.
                 </h1>
             ) : (
-                <div className="w-full h-[600px] max-h-[600px] flex gap-4">
+                <div
+                    className={`w-full flex gap-4 ${
+                        !isMobile ? "h-[600px] max-h-[600px]" : ""
+                    }`}
+                >
                     <div className="w-full md:w-80 md:min-w-80 px-1 flex flex-col gap-4">
                         {productions.map((production, index) => (
                             <ProductionInfoCard
